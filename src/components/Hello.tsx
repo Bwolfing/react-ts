@@ -19,9 +19,7 @@ export class Hello extends React.Component<HelloProperties, {}> {
                         </p>
                     </div>
                 </div>
-                
             </div>
-            
         );
     }
 }
