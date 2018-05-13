@@ -8,6 +8,11 @@ export class ContactUs extends React.Component {
             name: "Bill Wolfington",
             title: "President and Senior Trip Advisor",
             photo: "bill.jpg"
+        },
+        {
+            name: "Laura Wolfington",
+            title: "Accounting and Trip Director",
+            photo: "laura.jpg"
         }
     ];
 
