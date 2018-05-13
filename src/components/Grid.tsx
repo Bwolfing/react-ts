@@ -1,19 +1,26 @@
 import * as React from "react";
 
-interface Person {
-    name: string;
-    age: number;
-    id: number;
+interface GridRowProperties {
+    person: Person;
+    onClickEvent: (person: Person) => void;
+}
+
+interface GridProperties {
+    onRowClickEvent: (person: Person) => void;
 }
 
 interface GridState {
     data: Person[];
 }
 
-class GridRow extends React.Component<{person: Person}, {}> {
+class GridRow extends React.Component<GridRowProperties, {}> {
+    onClick() {
+        this.props.onClickEvent(this.props.person);
+    }
+
     render() {
         return (
-            <tr data-id={this.props.person.id}>
+            <tr data-id={this.props.person.id} onClick={this.onClick.bind(this)}>
                 <td>
                     {this.props.person.name}
                 </td>
@@ -25,8 +32,8 @@ class GridRow extends React.Component<{person: Person}, {}> {
     }
 }
 
-export class Grid extends React.Component<{}, GridState> {
-    constructor(props: {}) {
+export class Grid extends React.Component<GridProperties, GridState> {
+    constructor(props: GridProperties) {
         super(props);
 
         this.state = {
@@ -52,7 +59,7 @@ export class Grid extends React.Component<{}, GridState> {
 
     render() {
         const gridRows = this.state.data.map(person => 
-            <GridRow key={person.id} person={person} />
+            <GridRow key={person.id} person={person} onClickEvent={this.props.onRowClickEvent} />
         );
 
         return (
