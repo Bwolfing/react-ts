@@ -3,7 +3,7 @@ const path = require("path");
 const tsconfigPaths = require("tsconfig-paths-webpack-plugin");
 
 module.exports = {
-    entry: "./src/index.tsx",
+    entry: "./src/App.tsx",
     output: {
         filename: "app.js",
         path: path.join(__dirname, "dist")
