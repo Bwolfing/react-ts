@@ -28,14 +28,14 @@ class App extends React.Component {
 
     render() {
         const navLinks = this._links.map(l =>
-            <li className="nav-item">
+            <li key={l.url} className="nav-item">
                 <NavLink className="nav-link" exact={l.exact} to={l.url}>
                     {l.text}
                 </NavLink> 
             </li>
         );
         const navRoutes = this._links.map(l =>
-            <Route exact={l.exact} path={l.url} component={l.component} />
+            <Route key={l.url} exact={l.exact} path={l.url} component={l.component} />
         );
 
         return (
@@ -46,9 +46,7 @@ class App extends React.Component {
                             {navLinks}
                         </ul>
                     </div>
-                    <div className="row">
-                        {navRoutes}
-                    </div>
+                    {navRoutes}
                 </div>
             </Router>
         );

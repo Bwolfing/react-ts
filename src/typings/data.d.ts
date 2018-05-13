@@ -1,5 +1,5 @@
-interface Person {
+interface Contact {
     name: string;
-    age: number;
-    id: number;
+    title: string;
+    photo: string;
 }
