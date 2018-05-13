@@ -8,7 +8,20 @@ export interface HelloProperties {
 export class Hello extends React.Component<HelloProperties, {}> {
     render() {
         return (
-            <h1>Hello from {this.props.compiler} and {this.props.framework}!</h1>
+            <div className="row">
+                <div className="col-12">
+                    <div className="jumbotron">
+                        <h1 className="display-4">
+                            Hello from {this.props.compiler} and {this.props.framework}!
+                        </h1>
+                        <p className="lead">
+                            This is a sample application using React
+                        </p>
+                    </div>
+                </div>
+                
+            </div>
+            
         );
     }
 }
