@@ -17,7 +17,12 @@ module.exports = {
         extensions: [ ".ts", ".tsx", ".js", ".json" ],
         plugins: [
             new tsconfigPaths()
-        ]
+        ],
+        alias: {
+            "react": path.join(__dirname, "node_modules/react/umd/react.development.js"),
+            "react-dom": path.join(__dirname, "node_modules/react-dom/umd/react-dom.development.js"),
+            "react-router-dom": path.join(__dirname, "node_modules/react-router-dom/umd/react-router-dom.js")
+        }
     },
 
     module: {
@@ -32,10 +37,5 @@ module.exports = {
                 loader: "source-map-loader"
             }
         ]
-    },
-
-    externals: {
-        "react": "React",
-        "react-dom": "ReactDOM"
     }
 }

@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 
 import { Home } from "@app/components/Home";
 import { About } from "@app/components/About";
@@ -12,10 +12,10 @@ class App extends React.Component {
                 <div className="container-fluid">
                     <ul className="nav nav-tabs">
                         <li className="nav-item">
-                            <Link className="nav-link" to="/">Home</Link> 
+                            <NavLink className="nav-link" exact to="/">Home</NavLink> 
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/about">About</Link> 
+                            <NavLink className="nav-link" to="/about">About</NavLink> 
                         </li>
                     </ul>
                     <Route exact path="/" component={Home} />
