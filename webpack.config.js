@@ -21,7 +21,8 @@ module.exports = {
         alias: {
             "react": path.join(__dirname, "node_modules/react/umd/react.development.js"),
             "react-dom": path.join(__dirname, "node_modules/react-dom/umd/react-dom.development.js"),
-            "react-router-dom": path.join(__dirname, "node_modules/react-router-dom/umd/react-router-dom.js")
+            "react-router-dom": path.join(__dirname, "node_modules/react-router-dom/umd/react-router-dom.js"),
+            "@bootstrap": path.join(__dirname, "bower_components/bootstrap")
         }
     },
 
