@@ -4,7 +4,7 @@ const tsconfigPaths = require("tsconfig-paths-webpack-plugin");
 const miniCssExtract = require("mini-css-extract-plugin");
 
 module.exports = {
-    entry: "./src/App.tsx",
+    entry: path.join(__dirname, "src/App.tsx"),
     output: {
         filename: "app.js",
         path: path.join(__dirname, "dist")
@@ -43,7 +43,16 @@ module.exports = {
             {
                 enforce: "pre",
                 test: /.js?$/,
-                loader: "source-map-loader"
+                use: [
+                    {
+                        loader: "source-map-loader",
+                        options: {
+                            includePaths: [
+                                path.join("@bootstrap/dist/bootstrap.js")
+                            ]
+                        }
+                    }
+                ]
             },
             {
                 test: /\.scss$/,
