@@ -1,6 +1,7 @@
 
 const path = require("path");
 const tsconfigPaths = require("tsconfig-paths-webpack-plugin");
+const miniCssExtract = require("mini-css-extract-plugin");
 
 module.exports = {
     entry: "./src/App.tsx",
@@ -8,6 +9,13 @@ module.exports = {
         filename: "app.js",
         path: path.join(__dirname, "dist")
     },
+
+    plugins: [
+        new miniCssExtract({
+            filename: "styles.css",
+            chunkFilename: "[id].css"
+        })
+    ],
 
     mode: "development",
 
@@ -40,9 +48,7 @@ module.exports = {
             {
                 test: /\.scss$/,
                 use: [
-                    {
-                        loader: "style-loader"
-                    },
+                    miniCssExtract.loader,
                     {
                         loader: "css-loader",
                         options: {
