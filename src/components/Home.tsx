@@ -1,5 +1,4 @@
 import * as React from "react";
-import { NavLink } from "react-router-dom";
 
 export class Home extends React.Component {
     render() {
@@ -17,12 +16,7 @@ export class Home extends React.Component {
                     trip packages ever established with our focus constantly aimed at personal
                     attention, creative programs, and client satisfaction. At Incentives &amp; Conference
                     Management no two trips are ever alike, something you and your client will sincerely
-                    appreciate. 
-                    <br />
-                    <br />
-                    <NavLink to="/about">
-                        Read more here...
-                    </NavLink>
+                    appreciate.
                 </p>
             </div>
         );
