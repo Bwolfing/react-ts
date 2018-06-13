@@ -1,5 +1,5 @@
-interface Contact {
-    name: string;
-    title: string;
-    photo: string;
+interface TodoItem {
+    id: number;
+    text: string;
+    completed: boolean;
 }
