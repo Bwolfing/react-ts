@@ -1,7 +1,6 @@
 {
   "name": "react-ts",
   "description": "Practice project to learn React with TypeScript",
-  "main": "index.js",
   "authors": [
     "Billy Wolfington <wolfington98@gmail.com>"
   ],
