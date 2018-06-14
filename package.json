@@ -9,6 +9,9 @@
     "build": "webpack",
     "watch": "webpack --watch"
   },
+  "bin": {
+    "bower": "./node_modules/.bin/bower"
+  },
   "author": "",
   "license": "MIT",
   "dependencies": {
