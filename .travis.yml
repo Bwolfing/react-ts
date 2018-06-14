@@ -1,0 +1,13 @@
+install:
+  - npm install
+
+before_script:
+  - npm install -g webpack webpack-cli
+script:
+  - webpack
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: $HerokuApiKey
+  app: my-example-react-app
