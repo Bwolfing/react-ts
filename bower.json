@@ -1,0 +1,22 @@
+{
+  "name": "react-ts",
+  "description": "Practice project to learn React with TypeScript",
+  "main": "index.js",
+  "authors": [
+    "Billy Wolfington <wolfington98@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/bwolfing/react-ts",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^4.1.1",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.3"
+  }
+}
