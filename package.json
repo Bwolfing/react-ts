@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
-    "heroku-postbuild": "rm dist/* && webpack -p --config webpack.config.prod.js",
+    "heroku-postbuild": "webpack -p --config webpack.config.prod.js",
     "start": "node server",
     "watch": "webpack --watch --config webpack.config.dev.js",
     "bower": "bower"
