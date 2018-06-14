@@ -1,5 +1,3 @@
-import "@app/styles/custom.scss";
-
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
