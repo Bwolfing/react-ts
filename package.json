@@ -10,7 +10,9 @@
     "watch": "webpack --watch"
   },
   "bin": {
-    "bower": "./node_modules/.bin/bower"
+    "bower": "./node_modules/.bin/bower",
+    "webpack": "./node_modules/.bin/webpack",
+    "webpack-cli": "./node_modules/.bin/webpack-cli"
   },
   "author": "",
   "license": "MIT",
