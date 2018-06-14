@@ -1,41 +1,8 @@
 import * as React from "react";
-import { Todo } from "@app/components/Todo";
+
+import { ConnectedTodoList } from "@app/components/ConnectedTodoList";
 
 export class Home extends React.Component {
-    private readonly _exampleTodos = [
-        {
-            id: 1,
-            completed: true,
-            text: "Read about React"
-        },
-        {
-            id: 2,
-            completed: true,
-            text: "Read about Redux"
-        },
-        {
-            id: 3,
-            completed: false,
-            text: "Build basic React app"
-        },
-        {
-            id: 4,
-            completed: false,
-            text: "Use Redux with React app"
-        }
-    ];
-
-    onClickHandler(id: number) {
-        let clickedTodo = this._exampleTodos.filter(t => t.id === id);
-        
-        if (clickedTodo.length !== 1) {
-            console.error(`Unknown todo Id provided: ${id}`);
-            return;
-        }
-
-        console.log(clickedTodo[0].text);
-    }
-
     render() {
         return (
             <div>
@@ -54,7 +21,7 @@ export class Home extends React.Component {
                     appreciate.
                 </p>
                 <div>
-                    {this._exampleTodos.map(t => <Todo key={t.id} item={t} onClick={this.onClickHandler.bind(this)} />)}
+                    <ConnectedTodoList />
                 </div>
             </div>
         );

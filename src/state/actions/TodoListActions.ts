@@ -8,7 +8,7 @@ export const enum TodoListVisibility {
     Incomplete
 }
 
-interface TodoListAction extends Action {
+export interface TodoListAction extends Action {
     type: TodoListActionTypes;
 }
 

@@ -16,7 +16,9 @@ export class Todo extends React.Component<TodoProps> {
             <div className="card-body">
                 <p className="card-text">
                     <input type="checkbox" checked={this.props.item.completed} disabled />
-                    {this.props.item.text}
+                    <span className={this.props.item.completed ? "text-line-through" : "" }>
+                        {this.props.item.text}
+                    </span>
                 </p>
             </div>
         </div>
