@@ -1,11 +1,7 @@
-install:
-  - npm install
-
-before_script:
-  - npm install -g webpack webpack-cli bower
-  - bower install
-script:
-  - webpack
+language: node_js
+node_js:
+  - "iojs"
+  - "7"
 
 deploy:
   provider: heroku
