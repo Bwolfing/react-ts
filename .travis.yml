@@ -1,7 +1,9 @@
 install:
   - npm install
-  - npm run bower install
 
+before_script:
+  - npm install -g webpack webpack-cli bower
+  - bower install
 script:
   - webpack
 
