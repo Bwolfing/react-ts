@@ -4,7 +4,7 @@ export class About extends React.Component {
     render() {
         return (
             <div>
-                <p className="example">
+                <p>
                     Incentives &amp; Conference Management is a full service incentive travel company,
                     specializing in completely planned award programs. With nearly 35 combined years
                     experience in the travel awards industry we offer the most comprehensive WORLDWIDE
