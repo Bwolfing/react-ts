@@ -9,3 +9,5 @@ deploy:
   api_key:
     secure: $HerokuApiKey
   app: my-example-react-app
+  on:
+    branch: master
