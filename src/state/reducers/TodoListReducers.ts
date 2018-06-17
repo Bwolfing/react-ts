@@ -41,7 +41,7 @@ function filter(state: TodoListVisibility = TodoListVisibility.All, action: Todo
     }
 }
 
-function fetchingTodos(state: boolean, action: TodoListAction): boolean {
+export function fetchingTodos(state: boolean, action: TodoListAction): boolean {
     switch (action.type) {
         case "Fetch Todos_PENDING":
             return true;
