@@ -1,5 +1,10 @@
 @import "@bootstrap/scss/bootstrap.scss";
 
+button[disabled],
+.btn.disabled {
+    cursor: not-allowed;
+}
+
 .text-line-through
 {
     text-decoration: line-through;

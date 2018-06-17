@@ -1,14 +1,16 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
-import { createStore } from "redux";
+import { applyMiddleware, createStore } from "redux";
+import { createLogger } from "redux-logger";
+import promiseMiddleware from "redux-promise-middleware";
 import { Provider } from "react-redux";
 
 import { todoApp } from "@app/state/reducers/TodoListReducers";
 
 import { Home } from "@app/components/Home";
 import { About } from "@app/components/About";
-import { addTodo } from "@app/state/actions/TodoListActions";
+import { addTodo, fetchTodos } from "@app/state/actions/TodoListActions";
 
 const NavLinks = [
     {
@@ -24,12 +26,19 @@ const NavLinks = [
     }
 ];
 
-const todoAppStore = createStore(todoApp);
+const todoAppStore = createStore(
+    todoApp,
+    applyMiddleware(
+        promiseMiddleware(),
+        createLogger()
+    )
+);
 
-todoAppStore.dispatch(addTodo("Read about React"));
-todoAppStore.dispatch(addTodo("Build with React"));
-todoAppStore.dispatch(addTodo("Read Redux"));
-todoAppStore.dispatch(addTodo("Build with Redux"));
+todoAppStore.dispatch(fetchTodos());
+// todoAppStore.dispatch(addTodo("Read about React"));
+// todoAppStore.dispatch(addTodo("Build with React"));
+// todoAppStore.dispatch(addTodo("Read Redux"));
+// todoAppStore.dispatch(addTodo("Build with Redux"));
 
 class App extends React.Component {
     render() {

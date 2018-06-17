@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { ConnectedTodoList } from "@app/components/ConnectedTodoList";
+import { RefreshTodos } from "@app/components/RefreshTodos";
 import { AddTodo } from "@app/components/AddTodo";
 
 export class Home extends React.Component {
@@ -22,6 +23,7 @@ export class Home extends React.Component {
                     appreciate.
                 </p>
                 <div>
+                    <RefreshTodos />
                     <ConnectedTodoList />
                     <AddTodo />
                 </div>
