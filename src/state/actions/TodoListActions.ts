@@ -1,8 +1,7 @@
-import { fetch } from "cross-fetch";
 import { Action, Dispatch } from "redux";
 
-export type TodoListActionTypes = "Add Todo" | "Toggle Todo" | "Set Visibility" |
-    "Fetch Todos" | "Received Todos" | "Failed Todos Fetch";
+export type FetchTodosActionTypes = "Fetch Todos_PENDING" | "Fetch Todos_FULFILLED" | "Fetch Todos_REJECTED";
+export type TodoListActionTypes = "Add Todo" | "Toggle Todo" | "Set Visibility" | "Fetch Todos";
 
 export const enum TodoListVisibility {
     All,
@@ -11,7 +10,7 @@ export const enum TodoListVisibility {
 }
 
 export interface TodoListAction extends Action {
-    type: TodoListActionTypes;
+    type: TodoListActionTypes | FetchTodosActionTypes;
 }
 
 export interface AddTodoAction extends TodoListAction {
@@ -29,18 +28,24 @@ export interface TodoFilterAction extends TodoListAction {
     filter: TodoListVisibility;
 }
 
-export interface FetchTodosAction extends TodoListAction {
+interface InitiateFetchTodosAction extends TodoListAction {
     type: "Fetch Todos";
+    payload: Promise<TodoItem[]>;
 }
 
-export interface RecievedTodosAction extends TodoListAction {
-    type: "Received Todos";
-    todos: TodoItem[];
+export interface PendingTodoFetchAction extends TodoListAction {
+    type: "Fetch Todos_PENDING";
 }
 
-export interface FailedTodosFetchAction extends TodoListAction {
-    type: "Failed Todos Fetch";
-    error: Error;
+export interface FulfilledTodoFetchAction extends TodoListAction {
+    type: "Fetch Todos_FULFILLED";
+    payload: TodoItem[];
+}
+
+export interface RejectedTodoFetchAction extends TodoListAction {
+    type: "Fetch Todos_REJECTED";
+    error: boolean;
+    payload: any;
 }
 
 export function addTodo(text: string): AddTodoAction {
@@ -64,33 +69,16 @@ export function setFilter(filter: TodoListVisibility): TodoFilterAction {
     };
 }
 
-export function receivedTodos(todos: TodoItem[]): RecievedTodosAction {
+export function fetchTodos(): InitiateFetchTodosAction {
     return {
-        type: "Received Todos",
-        todos
-    };
-}
+        type: "Fetch Todos",
+        payload: window.fetch("/api/todos")
+            .then(async response => {
+                if (response.ok) {
+                    return await response.json();
+                }
 
-export function failedTodosFetch(error: Error): FailedTodosFetchAction {
-    return {
-        type: "Failed Todos Fetch",
-        error
-    };
-}
-
-export function fetchTodos() {
-    return (dispatch: Dispatch) => {
-        dispatch({
-            type: "Fetch Todos"
-        });
-
-        return fetch("/api/todos")
-            .then(
-                response => <Promise<TodoItem[]>>response.json()
-            )
-            .then(
-                todos => dispatch(receivedTodos(todos)),
-                error => dispatch(failedTodosFetch(error))
-            );
+                return Promise.reject(await response.json());
+            })
     };
 }
