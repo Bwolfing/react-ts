@@ -4,11 +4,13 @@
   "description": "Practice project to learn React with TypeScript",
   "main": "index.js",
   "scripts": {
+    "postinstall": "bower install",
     "test": "karma start --single-run",
     "test-dev": "karma start",
     "heroku-postbuild": "webpack -p --config webpack.config.prod.js",
     "start": "node server",
-    "watch": "webpack --watch --config webpack.config.dev.js",
+    "build": "webpack --config webpack.config.dev.js",
+    "watch": "webpack --config webpack.config.dev.js --watch",
     "bower": "bower"
   },
   "author": "",

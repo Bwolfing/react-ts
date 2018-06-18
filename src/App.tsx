@@ -1,3 +1,5 @@
+import "@app/styles/styles.scss";
+
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
@@ -35,10 +37,6 @@ const todoAppStore = createStore(
 );
 
 todoAppStore.dispatch(fetchTodos());
-// todoAppStore.dispatch(addTodo("Read about React"));
-// todoAppStore.dispatch(addTodo("Build with React"));
-// todoAppStore.dispatch(addTodo("Read Redux"));
-// todoAppStore.dispatch(addTodo("Build with Redux"));
 
 class App extends React.Component {
     render() {

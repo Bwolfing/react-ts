@@ -14,10 +14,12 @@ module.exports = {
     entry: {
         "main": [
             path.join(__dirname, "src/App.tsx"),
-        ],
-        "styles": [
-            path.join(__dirname, "src/styles/styles.scss")
         ]
+    },
+    output: {
+        path: path.join(__dirname, "dist"),
+        filename: "[name].bundle.js",
+        chunkFilename: "[id].bundle.js",
     },
     resolve: {
         extensions: [
@@ -40,7 +42,7 @@ module.exports = {
     plugins: [
         new webpack.NoEmitOnErrorsPlugin(),
         new MiniCssExtract({
-            filename: "styles.css",
+            filename: "styles.bundle.css"
         }),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, "index.html"),
@@ -70,11 +72,6 @@ module.exports = {
             },
         })
     ],
-    output: {
-        path: path.join(__dirname, "dist"),
-        filename: "[name].bundle.js",
-        chunkFilename: "[id].chunk.js",
-    },
     module: {
         rules: [
             {
@@ -118,12 +115,15 @@ module.exports = {
     },
     optimization: {
         splitChunks: {
+            chunks: "all",
             cacheGroups: {
                 styles: {
                     name: 'styles',
                     test: /\.css$/,
-                    chunks: 'all',
-                    enforce: true
+                },
+                vendor: {
+                    name: "vendor",
+                    test: /[\\/]node_modules[\\/]/,
                 }
             }
         }
