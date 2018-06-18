@@ -8,21 +8,6 @@ const webpack = require("webpack");
 const entryPoints = ["inline","polyfills","sw-register","styles","vendor","main"];
 const environmentName = process.env.NODE_ENV || "development";
 
-const aliasFiles = {
-    "react": {
-        production: ".production.min",
-        development: ".development"
-    },
-    "react-router-dom": {
-        production: ".min",
-        development: ""
-    },
-    "react-redux": {
-        production: ".min",
-        development: ""
-    },
-};
-
 console.log(environmentName);
 
 module.exports = {
