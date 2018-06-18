@@ -45,7 +45,7 @@ app.get("/api/todos", (request, response) => {
 });
 
 app.get("*", (request, response) => {
-    response.sendFile(path.join(root, "index.html"));
+    response.sendFile(path.join(dist, "index.html"));
 });
 
 const port = process.env.PORT || 5000;
