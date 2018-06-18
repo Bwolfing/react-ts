@@ -10,10 +10,6 @@ const aliasFiles = {
         production: ".production.min",
         development: ".development"
     },
-    "react-dom": {
-        production: ".production.min",
-        development: ".development"
-    },
     "react-router-dom": {
         production: ".min",
         development: ""
@@ -59,6 +55,7 @@ module.exports = [
             rules: [
                 {
                     test: /\.scss$/,
+                    exclude: /\.(js|ts|tsx)$/,
                     use: [
                         MiniCssExtract.loader,
                         "css-loader",
@@ -83,12 +80,11 @@ module.exports = [
             alias: (() => {
                 let alias = {
                     "react": path.join(__dirname, "node_modules/react/umd/"),
-                    "react-dom": path.join(__dirname, "node_modules/react-dom/umd/"),
                     "react-router-dom": path.join(__dirname, "node_modules/react-router-dom/umd/"),
                     "react-redux": path.join(__dirname, "node_modules/react-redux/dist/"),
                 };
 
-                for (let key in aliasFiles) {
+                for (let key in alias) {
                     alias[key] = path.join(
                         alias[key],
                         key + aliasFiles[key][environmentName] + ".js");
