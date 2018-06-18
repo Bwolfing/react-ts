@@ -18,7 +18,7 @@ export class TodoList extends React.Component<TodoListProps> {
             );
         }
         return this.props.todos.map(t =>
-            <Todo key={t.id} item={t} onClick={this.props.onTodoClick} />
+            <Todo key={t.id} item={t} onTodoClick={this.props.onTodoClick} />
         );
     }
 }
