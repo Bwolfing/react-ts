@@ -1,21 +1,11 @@
-const webpack = require("webpack");
-const commonConfig = require("./webpack.config.common");
-const merge = require("webpack-merge");
-const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin")
 
-module.exports = merge(
-    commonConfig,
-    {
-        mode: "development",
-        entry: path.join(__dirname, "src/Tests.js"),
-        output: {
-            path: path.join(__dirname, "dist/test")
-        },
-        devtool: "inline-source-map",
-        plugins: [
-            new webpack.DefinePlugin({
-                "typeof window": JSON.stringify("object")
-            })
-        ]
-    }
-);
+const commonConfig = require("./webpack.config.common");
+
+let testConfig = Object.assign({}, commonConfig);
+
+testConfig.plugins = testConfig.plugins.filter(p => !(p instanceof HtmlWebpackPlugin));
+delete testConfig.entry;
+delete testConfig.optimization;
+
+module.exports = testConfig;

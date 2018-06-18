@@ -30,7 +30,6 @@ module.exports = function (config) {
         singleRun: false,
         files: ["Tests.js"],
         preprocessors: {
-            "App.tsx": ["webpack", "sourcemap"],
             "Tests.js": ["webpack", "sourcemap"]
         },
         webpack: webpackConfig,
