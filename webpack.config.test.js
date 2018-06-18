@@ -4,17 +4,17 @@ const merge = require("webpack-merge");
 const path = require("path");
 
 module.exports = merge(
-    commonConfig[1],
+    commonConfig,
     {
         mode: "development",
         entry: path.join(__dirname, "src/Tests.js"),
-        output: Object.assign({}, commonConfig[1].output, {
+        output: {
             path: path.join(__dirname, "dist/test")
-        }),
+        },
         devtool: "inline-source-map",
         plugins: [
             new webpack.DefinePlugin({
-                'typeof window': JSON.stringify("object")
+                "typeof window": JSON.stringify("object")
             })
         ]
     }
