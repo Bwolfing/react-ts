@@ -3,7 +3,7 @@ import * as React from "react";
 
 import { Todo, TodoProps } from "./Todo";
 
-describe("Todo", () => {
+describe("Todo component", () => {
     let todoProps: TodoProps;
     let todoComponent: ShallowWrapper;
 
@@ -37,13 +37,31 @@ describe("Todo", () => {
         expect(todoComponent.find(".text-line-through").length).toBe(1);
     });
 
-    it("when todo is not completed then text-line-through class is not in use.", () => {
-        todoProps.item.completed = false;
+    it("when todo is completed then checkbox is checked.", () => {
+        todoProps.item.completed = true;
 
+        shallowRenderElement();
+
+        expect(todoComponent.find("input[type='checkbox']").props().checked).toBeTruthy();
+    });
+
+    it("when todo is not completed then text-line-through class is not in use.", () => {
         shallowRenderElement();
 
         expect(todoComponent.find(".text-line-through").length).toBe(0);
     });
+
+    it("when todo is not completed then checkbox is not checked.", () => {
+        shallowRenderElement();
+
+        expect(todoComponent.find("input[type='checkbox']").props().checked).toBeFalsy();
+    });
+
+    it("then todo text is rendered in view.", () => {
+        shallowRenderElement();
+
+        expect(todoComponent.find(".card .card-body .card-text span").text()).toContain(todoProps.item.text);
+    })
 
     function shallowRenderElement() {
         todoComponent = shallow(<Todo item={todoProps.item} onTodoClick={todoProps.onTodoClick} />);
