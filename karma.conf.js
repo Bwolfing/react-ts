@@ -6,7 +6,7 @@ module.exports = function (config) {
         frameworks: ["jasmine"],
         plugins: [
             require("karma-jasmine"),
-            require("karma-chrome-launcher"),
+            require("karma-firefox-launcher"),
             require("karma-jasmine-html-reporter"),
             require("karma-webpack"),
             require("karma-sourcemap-loader")
@@ -26,10 +26,11 @@ module.exports = function (config) {
         colors: true,
         logLevel: config.LOG_INFO,
         autoWatch: true,
-        browsers: ["Chrome"],
+        browsers: ["Firefox"],
         singleRun: false,
         files: ["Tests.js"],
         preprocessors: {
+            "App.tsx": ["webpack", "sourcemap"],
             "Tests.js": ["webpack", "sourcemap"]
         },
         webpack: webpackConfig,
