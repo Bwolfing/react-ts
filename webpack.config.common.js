@@ -48,23 +48,9 @@ module.exports = {
         plugins: [
             new TsconfigPaths()
         ],
-        alias: (() => {
-            let alias = {
-                "@bootstrap": path.join(__dirname, "bower_components/bootstrap")
-            };
-
-            for (let key in alias) {
-                if (!(key in aliasFiles)) {
-                    continue;
-                }
-
-                alias[key] = path.join(
-                    alias[key],
-                    key + aliasFiles[key][environmentName] + ".js");
-            }
-
-            return alias;
-        })(),
+        alias: {
+            "@bootstrap": path.join(__dirname, "bower_components/bootstrap")
+        },
     },
     plugins: [
         new webpack.NoEmitOnErrorsPlugin(),
