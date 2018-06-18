@@ -1,9 +1,8 @@
 import "@app/styles/styles.scss";
 
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
-import { applyMiddleware, createStore } from "redux";
+import { applyMiddleware, createStore, Store } from "redux";
 import { createLogger } from "redux-logger";
 import promiseMiddleware from "redux-promise-middleware";
 import { Provider } from "react-redux";
@@ -12,7 +11,7 @@ import { todoApp } from "@app/state/reducers/TodoListReducers";
 
 import { Home } from "@app/components/Home";
 import { About } from "@app/components/About";
-import { addTodo, fetchTodos } from "@app/state/actions/TodoListActions";
+import { fetchTodos } from "@app/state/actions/TodoListActions";
 
 const NavLinks = [
     {
@@ -28,17 +27,26 @@ const NavLinks = [
     }
 ];
 
-const todoAppStore = createStore(
-    todoApp,
-    applyMiddleware(
-        promiseMiddleware(),
-        createLogger()
-    )
-);
 
-todoAppStore.dispatch(fetchTodos());
+export class App extends React.Component {
+    private todoAppStore: Store;
 
-class App extends React.Component {
+    constructor(props: any) {
+        super(props);
+
+        this.todoAppStore = createStore(
+            todoApp,
+            applyMiddleware(
+                promiseMiddleware(),
+                createLogger()
+            )
+        );
+    }
+
+    componentDidMount() {
+        this.todoAppStore.dispatch(fetchTodos());
+    }
+
     render() {
         const navLinks = NavLinks.map(l =>
             <li key={l.url} className="nav-item">
@@ -52,23 +60,18 @@ class App extends React.Component {
         );
 
         return (
-            <Router>
-                <div className="container-fluid">
-                    <div className="navbar">
-                        <ul className="nav nav-tabs">
-                            {navLinks}
-                        </ul>
+            <Provider store={this.todoAppStore}>
+                <Router>
+                    <div className="container-fluid">
+                        <div className="navbar">
+                            <ul className="nav nav-tabs">
+                                {navLinks}
+                            </ul>
+                        </div>
+                        {navRoutes}
                     </div>
-                    {navRoutes}
-                </div>
-            </Router>
+                </Router>
+            </Provider>
         );
     }
 }
-
-ReactDOM.render(
-    <Provider store={todoAppStore}>
-        <App />
-    </Provider>,
-    document.getElementById("App")
-);

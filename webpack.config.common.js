@@ -11,11 +11,7 @@ const environmentName = process.env.NODE_ENV || "development";
 console.log(environmentName);
 
 module.exports = {
-    entry: {
-        "main": [
-            path.join(__dirname, "src/App.tsx"),
-        ]
-    },
+    entry: path.join(__dirname, "src/main.tsx"),
     output: {
         path: path.join(__dirname, "dist"),
         filename: "[name].bundle.js",
