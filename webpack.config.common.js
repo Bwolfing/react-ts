@@ -13,10 +13,23 @@ const isProdBuild = environmentName === "production";
 console.log(environmentName);
 
 module.exports = {
-    entry: path.join(__dirname, "src/main.tsx"),
+    entry: {
+        main: [
+            path.join(__dirname, "src/main.tsx")
+        ],
+        "service-worker": [
+            path.join(__dirname, "src/service-worker.ts")
+        ]
+    },
     output: {
         path: path.join(__dirname, "dist"),
-        filename: `[name].bundle${isProdBuild ? ".[hash]" : ""}.js`,
+        filename: (details) => {
+            if (details.chunk.name === "service-worker") {
+                return "[name].bundle.js";
+            }
+            
+            return `[name].bundle${isProdBuild ? ".[hash]" : ""}.js`;
+        },
         chunkFilename: `[name].bundle${isProdBuild ? ".[hash]" : ""}.js`,
     },
     resolve: {
@@ -69,7 +82,8 @@ module.exports = {
                     return 0;
                 }
             },
-        })
+        }),
+        new webpack.ExtendedAPIPlugin()
     ],
     module: {
         rules: [
