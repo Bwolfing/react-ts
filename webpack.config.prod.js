@@ -1,29 +1,21 @@
 const merge = require("webpack-merge");
-const uglifyJsPlugin = require("uglifyjs-webpack-plugin");
-const optimizeCssPlugin = require("optimize-css-assets-webpack-plugin");
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const OptimizeCssPlugin = require("optimize-css-assets-webpack-plugin");
 
 const standardConfig = require("./webpack.config.common");
 
-
-module.exports = () => {
-    let configs = [];
-    for (let i = 0; i < standardConfig.length; i++) {
-        configs.push(
-            merge(standardConfig[i], {
-                mode: "production",
-
-                optimization: {
-                    minimize: true,
-                    minimizer: [
-                        new uglifyJsPlugin({
-                            sourceMap: false
-                        }),
-                        new optimizeCssPlugin()
-                    ]
-                }
-            })
-        );
+module.exports = merge(
+    standardConfig,
+    {
+        mode: "production",
+        optimization: {
+            minimize: true,
+            minimizer: [
+                new UglifyJsPlugin({
+                    sourceMap: false
+                }),
+                new OptimizeCssPlugin()
+            ]
+        }
     }
-
-    return configs;
-};
+);
