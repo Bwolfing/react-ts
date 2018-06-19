@@ -1,10 +1,13 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin")
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CleanWebpackPlugin = require("clean-webpack-plugin");
 
 const commonConfig = require("./webpack.config.common");
 
 let testConfig = Object.assign({}, commonConfig);
 
-testConfig.plugins = testConfig.plugins.filter(p => !(p instanceof HtmlWebpackPlugin));
+testConfig.plugins = testConfig.plugins.filter(p =>
+    !(p instanceof HtmlWebpackPlugin) && !(p instanceof CleanWebpackPlugin)
+);
 delete testConfig.entry;
 delete testConfig.optimization;
 

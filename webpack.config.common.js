@@ -3,10 +3,12 @@ const path = require("path");
 const TsconfigPaths = require("tsconfig-paths-webpack-plugin");
 const MiniCssExtract = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CleanWebpackPlugin = require("clean-webpack-plugin");
 const webpack = require("webpack");
 
 const entryPoints = ["inline","polyfills","sw-register","styles","vendor","main"];
 const environmentName = process.env.NODE_ENV || "development";
+const isProdBuild = environmentName === "production";
 
 console.log(environmentName);
 
@@ -14,8 +16,8 @@ module.exports = {
     entry: path.join(__dirname, "src/main.tsx"),
     output: {
         path: path.join(__dirname, "dist"),
-        filename: "[name].bundle.js",
-        chunkFilename: "[id].bundle.js",
+        filename: `[name].bundle${isProdBuild ? ".[hash]" : ""}.js`,
+        chunkFilename: `[name].bundle${isProdBuild ? ".[hash]" : ""}.js`,
     },
     resolve: {
         extensions: [
@@ -37,9 +39,10 @@ module.exports = {
     },
     mode: environmentName,
     plugins: [
+        new CleanWebpackPlugin(path.join(__dirname, "dist")),
         new webpack.NoEmitOnErrorsPlugin(),
         new MiniCssExtract({
-            filename: "styles.bundle.css"
+            filename: `styles.bundle${isProdBuild ? ".[hash]" : ""}.css`
         }),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, "index.html"),
@@ -52,7 +55,6 @@ module.exports = {
             showErrors: true,
             chunks: "all",
             excludeChunks: [],
-            title: "Webpack App",
             xhtml: true,
             chunksSortMode: function sort(left, right) {
                 let leftIndex = entryPoints.indexOf(left.names[0]);
