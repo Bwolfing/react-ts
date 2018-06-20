@@ -12,16 +12,17 @@ import { todoApp } from "@app/state/reducers/TodoListReducers";
 import { Home } from "@app/components/Home";
 import { About } from "@app/components/About";
 import { fetchTodos } from "@app/state/actions/TodoListActions";
+import { Routes } from "@app/application-routes";
 
 const NavLinks = [
     {
-        url: "/",
+        url: Routes.Index,
         exact: true,
         text: "Home",
         component: Home
     },
     {
-        url: "/about",
+        url: Routes.About,
         text: "About",
         component: About
     }

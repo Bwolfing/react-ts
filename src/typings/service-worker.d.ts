@@ -1,9 +1,9 @@
 interface InstallEvent extends Event {
-    waitUntil(promise: Promise<void>): void;
+    waitUntil<T>(promise: Promise<T>): void;
 }
 
 interface FetchEvent extends Event {
-    respondWith(promise: Promise<void>): void
+    respondWith<T>(promise: Promise<T>): void
     request: Request;
 }
 

@@ -1,3 +1,5 @@
+import { Routes } from "@app/application-routes";
+
 declare const __webpack_hash__: string;
 
 export function registerServiceWorker() {
@@ -16,18 +18,26 @@ export function registerServiceWorker() {
 }
 
 const AssetCache = `Asset_Cache_${__webpack_hash__}`;
+const PageCache = `Page_Cache_${__webpack_hash__}`;
 const ApplicationCaches = [
-    AssetCache
+    AssetCache,
+    PageCache
 ];
 
 function onInstall(event: InstallEvent) {
     console.log("Installing service worker.");
     event.waitUntil(
-        caches.open(AssetCache)
+        Promise.all([
+            openAssetCache(),
+            openPageCache()
+        ])
+    );
+
+    function openAssetCache() {
+        return caches.open(AssetCache)
             .then(cache => {
-                console.log("Cache opened");
+                console.log("Opened asset cache.");
                 const assetsToCache = [
-                    "/",
                     "/main.bundle.js",
                     "/vendor.bundle.js",
                     "/styles.bundle.css"
@@ -35,10 +45,26 @@ function onInstall(event: InstallEvent) {
 
                 return cache.addAll(assetsToCache).then(
                     () => console.log("Assets stored."),
-                    (err) => console.error("Failed to add assets to asset cache.", err)
+                    err => console.error("Failed to add assets to asset cache.", err)
                 );
             })
-    );
+    }
+    function openPageCache() {
+        return caches.open(PageCache)
+            .then(cache => {
+                console.log("Opened page cache.");
+                let routeUrls = [];
+
+                for (const key in Routes) {
+                    routeUrls.push(Routes[key]);
+                }
+
+                return cache.addAll(routeUrls).then(
+                    () => console.log("Pages stored."),
+                    err => console.error("Failed to add pages to page cache.", err)
+                );
+            })
+    }
 }
 
 function onActivate(event: ActivateEvent) {
