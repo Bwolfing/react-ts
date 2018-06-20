@@ -3,7 +3,7 @@ const webpack = require("webpack");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const OptimizeCssPlugin = require("optimize-css-assets-webpack-plugin");
 
-const standardConfig = require("./webpack.config.common");
+const standardConfig = require("./config.common");
 
 module.exports = merge(
     standardConfig,

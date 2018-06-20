@@ -1,7 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 
-const commonConfig = require("./webpack.config.common");
+const commonConfig = require("./config.common");
 
 let testConfig = Object.assign({}, commonConfig);
 
