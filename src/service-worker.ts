@@ -1,21 +1,44 @@
 declare const __webpack_hash__: string;
 
-export function registerServiceWorker() {
-    if ("serviceWorker" in navigator) {
-        window.addEventListener("load", async () => {
-            try {
-                console.log("Environment: ", process.env.NODE_ENV);
-                if (process.env.NODE_ENV === "production") {
-                    console.log("hash: ",__webpack_hash__);
-                }
-
-                let registration = await navigator.serviceWorker.register("/service-worker.bundle.js");
-
-                console.log("Registered service worker!", registration.scope)
-            }
-            catch (e) {
-                console.error("Service worked registraion failed", e);
-            }
-        });
-    }
+function install() {
+    self.addEventListener("install", (event: InstallEvent) => {
+        event.waitUntil(
+            caches.open("Asset_Cache")
+                .then(cache => {
+                    console.log("Cache opened");
+                    // ["/", `/main.bundle.${__webpack_hash__}.js`, `/vendor.bundle.${__webpack_hash__}.js`, `styles.bundle.${__webpack_hash__}.css`]
+                    // ["/", "/styles.bundle.css", "vendor.bundle.js", "/main.bundle.js"]
+                    return cache.addAll(["/", `/main.bundle.${__webpack_hash__}.js`, `/vendor.bundle.${__webpack_hash__}.js`, `styles.bundle.${__webpack_hash__}.css`]).then(
+                        () => {
+                            console.log("Assets stored.");
+                        },
+                        (err) => {
+                            console.error("Rejected", err);
+                        }
+                    );
+                })
+        );
+    });
 }
+
+function listenToFetches() {
+    self.addEventListener("fetch", (event: FetchEvent) => {
+        console.log("Checking cache for value ", event.request);
+        event.respondWith(
+            caches.match(event.request)
+                .then(response => {
+                    if (response) {
+                        console.log("Value found in cache");
+                        return response;
+                    }
+
+                    console.log("Fetching request")
+                    return fetch(event.request);
+                })
+        );
+    }) ;
+}
+
+console.log("New service worker v2");
+install();
+listenToFetches();
