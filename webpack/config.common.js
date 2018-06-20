@@ -9,7 +9,6 @@ const webpack = require("webpack");
 const projectRoot = path.join(__dirname, "../");
 const entryPoints = ["inline","polyfills","sw-register","styles","vendor","main"];
 const environmentName = process.env.NODE_ENV || "development";
-const isProdBuild = environmentName === "production";
 
 console.log(environmentName);
 
@@ -24,14 +23,8 @@ module.exports = {
     },
     output: {
         path: path.join(projectRoot, "dist"),
-        filename: (details) => {
-            if (details.chunk.name === "service-worker") {
-                return "[name].bundle.js";
-            }
-
-            return `[name].bundle${isProdBuild ? ".[hash]" : ""}.js`;
-        },
-        chunkFilename: `[name].bundle${isProdBuild ? ".[hash]" : ""}.js`,
+        filename: "[name].bundle.js",
+        chunkFilename: "[name].bundle.js",
     },
     resolve: {
         extensions: [
@@ -53,10 +46,12 @@ module.exports = {
     },
     mode: environmentName,
     plugins: [
-        new CleanWebpackPlugin(path.join(projectRoot, "dist")),
+        new CleanWebpackPlugin(path.join(projectRoot, "dist"), {
+            root: projectRoot
+        }),
         new webpack.NoEmitOnErrorsPlugin(),
         new MiniCssExtract({
-            filename: `styles.bundle${isProdBuild ? ".[hash]" : ""}.css`
+            filename: "styles.bundle.css"
         }),
         new HtmlWebpackPlugin({
             template: path.join(projectRoot, "src/index.html"),
@@ -68,7 +63,9 @@ module.exports = {
             cache: true,
             showErrors: true,
             chunks: "all",
-            excludeChunks: [],
+            excludeChunks: [
+                "service-worker"
+            ],
             xhtml: true,
             chunksSortMode: function sort(left, right) {
                 let leftIndex = entryPoints.indexOf(left.names[0]);

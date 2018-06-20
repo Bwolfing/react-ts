@@ -15,59 +15,61 @@ export function registerServiceWorker() {
     }
 }
 
-function install() {
-    self.addEventListener("install", (event: InstallEvent) => {
-        event.waitUntil(
-            caches.open("Asset_Cache")
-                .then(cache => {
-                    console.log("Cache opened");
-                    const assetsToCache = [
-                        "/",
-                        "/main.bundle.js",
-                        "/vendor.bundle.js",
-                        "/styles.bundle.css"
-                    ];
+const AssetCache = `Asset_Cache_${__webpack_hash__}`;
+const ApplicationCaches = [
+    AssetCache
+];
 
-                    return cache.addAll(assetsToCache.map(asset => {
-                        if (process.env.NODE_ENV !== "production") {
-                            return asset;
-                        }
+function onInstall(event: InstallEvent) {
+    console.log("Installing service worker.");
+    event.waitUntil(
+        caches.open(AssetCache)
+            .then(cache => {
+                console.log("Cache opened");
+                const assetsToCache = [
+                    "/",
+                    "/main.bundle.js",
+                    "/vendor.bundle.js",
+                    "/styles.bundle.css"
+                ];
 
-                        if (asset === "/") {
-                            return asset;
-                        }
-
-                        let assetNamePieces = asset.split(".");
-
-                        assetNamePieces.splice(assetNamePieces.length - 1, 0, __webpack_hash__)
-                        console.log(assetNamePieces.join("."))
-                        return assetNamePieces.join(".");
-                    })).then(
-                        () => console.log("Assets stored."),
-                        (err) => console.error("Failed to add assets to asset cache.", err)
-                    );
-                })
-        );
-    });
+                return cache.addAll(assetsToCache).then(
+                    () => console.log("Assets stored."),
+                    (err) => console.error("Failed to add assets to asset cache.", err)
+                );
+            })
+    );
 }
 
-function listenToFetches() {
-    self.addEventListener("fetch", (event: FetchEvent) => {
-        console.log("Checking cache for value ", event.request.url);
-        event.respondWith(
-            caches.match(event.request)
-                .then(response => {
-                    if (response) {
-                        console.log("Value found in cache");
-                        return response;
-                    }
-
-                    console.log("Fetching request")
-                    return fetch(event.request);
-                })
-        );
-    }) ;
+function onActivate(event: ActivateEvent) {
+    console.log("activiating new service working.");
+    event.waitUntil(
+        caches.keys().then(cacheNames =>
+            Promise.all(cacheNames.map(cacheName => {
+                if (ApplicationCaches.indexOf(cacheName) === -1) {
+                    return caches.delete(cacheName);
+                }
+            }))
+        )
+    );
 }
 
-install();
-listenToFetches();
+function onFetch(event: FetchEvent) {
+    console.log("Checking cache for value ", event.request.url);
+    event.respondWith(
+        caches.match(event.request)
+            .then(response => {
+                if (response) {
+                    console.log("Value found in cache");
+                    return response;
+                }
+
+                console.log("Fetching request")
+                return fetch(event.request);
+            })
+    );
+}
+
+self.addEventListener("install", onInstall);
+self.addEventListener("fetch", onFetch);
+self.addEventListener("activate", onActivate);
