@@ -40,7 +40,7 @@ function onInstall(event: InstallEvent) {
                 const assetsToCache = [
                     "/main.bundle.js",
                     "/vendor.bundle.js",
-                    "/styles.bundle.css"
+                    "/styles.bundle.css",
                 ];
 
                 return cache.addAll(assetsToCache).then(

@@ -41,7 +41,7 @@ module.exports = {
             new TsconfigPaths()
         ],
         alias: {
-            "@bootstrap": path.join(projectRoot, "bower_components/bootstrap")
+            "@bootstrap": path.join(projectRoot, "bower_components/bootstrap"),
         },
     },
     mode: environmentName,
@@ -93,7 +93,7 @@ module.exports = {
                 "test": /\.(eot|svg|cur)$/,
                 "loader": "file-loader",
                 "options": {
-                    "name": "[name].[hash:20].[ext]",
+                    "name": "[name].[ext]",
                     "limit": 10000
                 }
             },
@@ -101,7 +101,7 @@ module.exports = {
                 "test": /\.(jpg|png|webp|gif|otf|ttf|woff|woff2|ani)$/,
                 "loader": "url-loader",
                 "options": {
-                    "name": "[name].[hash:20].[ext]",
+                    "name": "[name].[ext]",
                     "limit": 10000
                 }
             },
@@ -112,6 +112,13 @@ module.exports = {
                     MiniCssExtract.loader,
                     "css-loader",
                     "sass-loader"
+                ]
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    MiniCssExtract.loader,
+                    "css-loader"
                 ]
             },
             {

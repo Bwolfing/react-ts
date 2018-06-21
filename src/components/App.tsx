@@ -19,12 +19,14 @@ const NavLinks = [
         url: Routes.Index,
         exact: true,
         text: "Home",
-        component: Home
+        component: Home,
+        icon: "fa-home"
     },
     {
         url: Routes.About,
         text: "About",
-        component: About
+        component: About,
+        icon: "fa-question"
     }
 ];
 
@@ -52,7 +54,7 @@ export class App extends React.Component {
         const navLinks = NavLinks.map(l =>
             <li key={l.url} className="nav-item">
                 <NavLink className="nav-link" exact={l.exact} to={l.url}>
-                    {l.text}
+                    <i className={"fas " + l.icon}></i> {l.text}
                 </NavLink>
             </li>
         );
