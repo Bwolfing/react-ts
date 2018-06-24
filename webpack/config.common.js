@@ -137,7 +137,7 @@ module.exports = {
             cacheGroups: {
                 styles: {
                     name: 'styles',
-                    test: /\.css$/,
+                    test: /([\\/]node_modules\/@fortawesome|\.css$)/,
                 },
                 vendor: {
                     name: "vendor",

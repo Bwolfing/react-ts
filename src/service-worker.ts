@@ -2,6 +2,9 @@ import { Routes } from "@app/application-routes";
 
 declare const __webpack_hash__: string;
 
+/**
+ * Registers a new service work for the website.
+ */
 export function registerServiceWorker() {
     if ("serviceWorker" in navigator) {
         window.addEventListener("load", async () => {
@@ -40,8 +43,11 @@ function onInstall(event: InstallEvent) {
                 const assetsToCache = [
                     "/main.bundle.js",
                     "/vendor.bundle.js",
+                    "/vendor.styles.bundle.css",
                     "/styles.bundle.css",
                 ];
+
+                pushFontAwesomeFiles(assetsToCache);
 
                 return cache.addAll(assetsToCache).then(
                     () => console.log("Assets stored."),
@@ -67,6 +73,13 @@ function onInstall(event: InstallEvent) {
     }
 }
 
+function pushFontAwesomeFiles(assetsToCache: string[]) {
+    for (const fontAwesomeFile of ["fa-brands-400", "fa-regular-400", "fa-solid-900"]) {
+        for (const fileType of ["eot", "svg", "ttf", "woff", "woff2"])
+        assetsToCache.push(`/${fontAwesomeFile}.${fileType}`);
+    }
+}
+
 function onActivate(event: ActivateEvent) {
     console.log("activiating new service working.");
     event.waitUntil(
@@ -89,6 +102,8 @@ function onFetch(event: FetchEvent) {
                     console.log("Value found in cache");
                     return response;
                 }
+
+
 
                 console.log("Fetching request")
                 return fetch(event.request);
