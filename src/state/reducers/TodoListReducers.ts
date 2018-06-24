@@ -27,6 +27,8 @@ function todos(state: TodoItem[] = [], action: TodoListAction): TodoItem[] {
             ];
         case "Fetch Todos_FULFILLED":
             return (<FulfilledTodoFetchAction>action).payload;
+        case "Fetch Todos_REJECTED":
+            return [];
         default:
             return state;
     }

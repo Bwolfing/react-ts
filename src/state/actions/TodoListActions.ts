@@ -72,13 +72,17 @@ export function setFilter(filter: TodoListVisibility): TodoFilterAction {
 export function fetchTodos(): InitiateFetchTodosAction {
     return {
         type: "Fetch Todos",
-        payload: window.fetch("/api/todos")
-            .then(async response => {
-                if (response.ok) {
-                    return await response.json();
-                }
+        payload: window.fetch("/api/todos", {
+            headers: {
+                "content-type": "application/json"
+            }
+        }).then(async response => {
+            console.log("beep boop")
+            if (response.ok) {
+                return await response.json();
+            }
 
-                return Promise.reject(await response.json());
-            })
+            return Promise.reject(await response.json());
+        })
     };
 }

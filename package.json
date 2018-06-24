@@ -7,10 +7,10 @@
     "postinstall": "bower install",
     "test": "karma start --single-run",
     "test-dev": "karma start",
-    "heroku-postbuild": "webpack -p --config webpack.config.prod.js",
+    "heroku-postbuild": "webpack -p --config webpack/config.prod.js",
     "start": "node server",
-    "build": "webpack --config webpack.config.dev.js",
-    "watch": "webpack --config webpack.config.dev.js --watch",
+    "build": "webpack --config webpack/config.dev.js",
+    "watch": "webpack --config webpack/config.dev.js --watch",
     "bower": "bower"
   },
   "author": "",
@@ -32,6 +32,7 @@
     "redux-promise-middleware": "^5.1.1"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.1.0",
     "@types/enzyme": "^3.1.10",
     "@types/jasmine": "^2.8.8",
     "awesome-typescript-loader": "^5.0.0",
