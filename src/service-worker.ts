@@ -22,9 +22,11 @@ export function registerServiceWorker() {
 
 const AssetCache = `Asset_Cache_${__webpack_hash__}`;
 const PageCache = `Page_Cache_${__webpack_hash__}`;
+const ApplicationCache = `Application_Cache_${__webpack_hash__}`;
 const ApplicationCaches = [
     AssetCache,
-    PageCache
+    PageCache,
+    ApplicationCache
 ];
 
 function onInstall(event: InstallEvent) {
@@ -59,7 +61,7 @@ function onInstall(event: InstallEvent) {
         return caches.open(PageCache)
             .then(cache => {
                 console.log("Opened page cache.");
-                let routeUrls = [];
+                let routeUrls: string[] = [];
 
                 for (const key in Routes) {
                     routeUrls.push(Routes[key]);
@@ -75,8 +77,9 @@ function onInstall(event: InstallEvent) {
 
 function pushFontAwesomeFiles(assetsToCache: string[]) {
     for (const fontAwesomeFile of ["fa-brands-400", "fa-regular-400", "fa-solid-900"]) {
-        for (const fileType of ["eot", "svg", "ttf", "woff", "woff2"])
-        assetsToCache.push(`/${fontAwesomeFile}.${fileType}`);
+        for (const fileType of ["eot", "svg", "ttf", "woff", "woff2"]) {
+            assetsToCache.push(`/${fontAwesomeFile}.${fileType}`);
+        }
     }
 }
 
@@ -96,19 +99,40 @@ function onActivate(event: ActivateEvent) {
 function onFetch(event: FetchEvent) {
     console.log("Checking cache for value ", event.request.url);
     event.respondWith(
-        caches.match(event.request)
-            .then(response => {
-                if (response) {
-                    console.log("Value found in cache");
-                    return response;
-                }
-
-
-
-                console.log("Fetching request")
-                return fetch(event.request);
-            })
+        fetchValueForRequest(event).catch((() => caches.match(event.request)))
     );
+}
+
+async function fetchValueForRequest(event: FetchEvent): Promise<Response> {
+    if (event.request.headers.get("content-type") === "application/json") {
+        return fetchAndCacheIfSuccessful(event.request);
+    }
+
+    const cacheValue = await caches.match(event.request);
+
+    if (cacheValue) {
+        console.log("Value found in cache");
+        return cacheValue;
+    }
+
+    console.log("Fetching request")
+    return fetch(event.request);
+}
+
+async function fetchAndCacheIfSuccessful(request: Request): Promise<Response> {
+    const requestClone = request.clone();
+    const response = await fetch(requestClone)
+
+    if (!response || !response.ok) {
+        return response;
+    }
+
+    const responseClone = response.clone();
+    const cache = await caches.open(ApplicationCache);
+
+    cache.put(request, responseClone);
+
+    return response;
 }
 
 self.addEventListener("install", onInstall);
