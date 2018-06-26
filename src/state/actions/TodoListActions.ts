@@ -1,6 +1,7 @@
-import { Action } from "redux";
+import { Action, Dispatch } from "redux";
 
-export type TodoListActionTypes = "Add Todo" | "Toggle Todo" | "Set Visibility";
+export type FetchTodosActionTypes = "Fetch Todos_PENDING" | "Fetch Todos_FULFILLED" | "Fetch Todos_REJECTED";
+export type TodoListActionTypes = "Add Todo" | "Toggle Todo" | "Set Visibility" | "Fetch Todos";
 
 export const enum TodoListVisibility {
     All,
@@ -9,7 +10,7 @@ export const enum TodoListVisibility {
 }
 
 export interface TodoListAction extends Action {
-    type: TodoListActionTypes;
+    type: TodoListActionTypes | FetchTodosActionTypes;
 }
 
 export interface AddTodoAction extends TodoListAction {
@@ -25,6 +26,26 @@ export interface ToggleTodoAction extends TodoListAction {
 export interface TodoFilterAction extends TodoListAction {
     type: "Set Visibility";
     filter: TodoListVisibility;
+}
+
+interface InitiateFetchTodosAction extends TodoListAction {
+    type: "Fetch Todos";
+    payload: Promise<TodoItem[]>;
+}
+
+export interface PendingTodoFetchAction extends TodoListAction {
+    type: "Fetch Todos_PENDING";
+}
+
+export interface FulfilledTodoFetchAction extends TodoListAction {
+    type: "Fetch Todos_FULFILLED";
+    payload: TodoItem[];
+}
+
+export interface RejectedTodoFetchAction extends TodoListAction {
+    type: "Fetch Todos_REJECTED";
+    error: boolean;
+    payload: any;
 }
 
 export function addTodo(text: string): AddTodoAction {
@@ -45,5 +66,23 @@ export function setFilter(filter: TodoListVisibility): TodoFilterAction {
     return {
         filter,
         type: "Set Visibility"
+    };
+}
+
+export function fetchTodos(): InitiateFetchTodosAction {
+    return {
+        type: "Fetch Todos",
+        payload: window.fetch("/api/todos", {
+            headers: {
+                "content-type": "application/json"
+            }
+        }).then(async response => {
+            console.log("beep boop")
+            if (response.ok) {
+                return await response.json();
+            }
+
+            return Promise.reject(await response.json());
+        })
     };
 }

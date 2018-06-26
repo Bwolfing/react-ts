@@ -12,9 +12,10 @@ function mapDispatchToProps(dispatch: Dispatch) {
     };
 }
 
-function mapStateToProps(state: { todos: TodoItem[], filter: TodoListVisibility }) {
+function mapStateToProps(state: { todos: TodoItem[], filter: TodoListVisibility, fetchingTodos: boolean }) {
     return {
-        todos: state.todos
+        todos: state.todos,
+        fetchingTodos: state.fetchingTodos
     };
 }
 
