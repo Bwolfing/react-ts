@@ -4,6 +4,7 @@ const TsconfigPaths = require("tsconfig-paths-webpack-plugin");
 const MiniCssExtract = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
+const PwaManifestPlugin = require("webpack-pwa-manifest");
 const webpack = require("webpack");
 
 const projectRoot = path.join(__dirname, "../");
@@ -81,6 +82,23 @@ module.exports = {
                 }
             },
         }),
+        new PwaManifestPlugin({
+            name: "React with TypeScript",
+            short_name: "React TS",
+            description: "Practice application for React and PWAs",
+            icons: [
+                {
+                    src: path.join(projectRoot, "src/assets/react.png"),
+                    size: 144
+                }
+            ],
+            background_color: "#fff",
+            fingerprints: false,
+            inject: true,
+            lang: "en-US",
+            display: "standalone",
+            start_url: "/about"
+        }),
         new webpack.ExtendedAPIPlugin()
     ],
     module: {
@@ -93,7 +111,7 @@ module.exports = {
                 "test": /\.(eot|svg|cur)$/,
                 "loader": "file-loader",
                 "options": {
-                    "name": "[name].[ext]",
+                    "name": "assets/[name].[ext]",
                     "limit": 10000
                 }
             },
@@ -101,7 +119,7 @@ module.exports = {
                 "test": /\.(jpg|png|webp|gif|otf|ttf|woff|woff2|ani)$/,
                 "loader": "url-loader",
                 "options": {
-                    "name": "[name].[ext]",
+                    "name": "assets/[name].[ext]",
                     "limit": 10000
                 }
             },
