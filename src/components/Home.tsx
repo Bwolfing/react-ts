@@ -14,14 +14,20 @@ export class Home extends React.Component {
                     </h5>
                 </div>
                 <p>
-                    Incentives &amp; Conference Management is a full service <strong>incentive travel</strong> company,
-                    specializing in completely planned award programs. With nearly 35 combined years
-                    experience in the travel awards industry we offer the most comprehensive <strong>WORLDWIDE</strong>
-                    trip packages ever established with our focus constantly aimed at personal
-                    attention, creative programs, and client satisfaction. At Incentives &amp; Conference
-                    Management no two trips are ever alike, something you and your client will sincerely
-                    appreciate.
+                    This is a simple progressive web app that I built for trying to learn about
+                    the following technologies!
                 </p>
+                <ul>
+                    <li>
+                        React
+                    </li>
+                    <li>
+                        Redux
+                    </li>
+                    <li>
+                        Service workers
+                    </li>
+                </ul>
                 <div>
                     <RefreshTodos />
                     <ConnectedTodoList />

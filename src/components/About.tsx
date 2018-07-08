@@ -5,13 +5,18 @@ export class About extends React.Component {
         return (
             <div>
                 <p>
-                    Incentives &amp; Conference Management is a full service incentive travel company,
-                    specializing in completely planned award programs. With nearly 35 combined years
-                    experience in the travel awards industry we offer the most comprehensive WORLDWIDE
-                    trip packages ever established with our focus constantly aimed at personal
-                    attention, creativity, and client satisfaction. At Incentives &amp; Conference
-                    Management no two trips are ever alike, something you and your client will
-                    sincerely appreciate.
+                    This is a simple progressive web app that I built for trying to learn about
+                    the emerging web technologies. I first focused on learning React because I
+                    have heard a great deal of chatter about the framework. After getting a basic
+                    understanding of React, I moved on to learning about Redux, since I have
+                    generally heard React and Redux referred to at the same time.
+                </p>
+                <p>
+                    I built all of this using TypeScript because I personally prefer it to writing
+                    JavaScript. The main reason I have this preference is because the compile-time
+                    checks to assist in ensuring type safety. The second reason I enjoy using TypeScript
+                    is because it can be transpiled to a variety of different JavaScript standards
+                    while maintaining only 1 set of code.
                 </p>
             </div>
         );
