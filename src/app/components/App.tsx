@@ -12,7 +12,7 @@ import { todoApp } from "@app/state/reducers/TodoListReducers";
 import { Home } from "@app/components/Home";
 import { About } from "@app/components/About";
 import { fetchTodos } from "@app/state/actions/TodoListActions";
-import { Routes } from "@app/application-routes";
+import { Routes } from "../application-routes";
 
 const NavLinks = [
     {

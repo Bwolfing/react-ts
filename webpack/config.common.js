@@ -16,10 +16,10 @@ console.log(environmentName);
 module.exports = {
     entry: {
         main: [
-            path.join(projectRoot, "src/main.tsx")
+            path.join(projectRoot, "src/app/main.tsx")
         ],
         "service-worker": [
-            path.join(projectRoot, "src/service-worker.ts")
+            path.join(projectRoot, "src/app/service-worker.ts")
         ]
     },
     output: {
@@ -55,7 +55,7 @@ module.exports = {
             filename: "styles.bundle.css"
         }),
         new HtmlWebpackPlugin({
-            template: path.join(projectRoot, "src/index.html"),
+            template: path.join(projectRoot, "src/app/index.html"),
             filename: "index.html",
             hash: false,
             inject: true,
@@ -88,7 +88,7 @@ module.exports = {
             description: "Practice application for React and PWAs",
             icons: [
                 {
-                    src: path.join(projectRoot, "src/assets/react.png"),
+                    src: path.join(projectRoot, "src/app/assets/react.png"),
                     size: 144
                 }
             ],
