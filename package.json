@@ -9,8 +9,8 @@
     "test-dev": "karma start",
     "heroku-postbuild": "webpack -p --config webpack/config.prod.js",
     "start": "node server",
-    "build": "webpack --config webpack/config.dev.js && webpack --config webpack/config.server.js",
-    "watch": "webpack --config webpack/config.dev.js --watch",
+    "build": "webpack --config webpack/config.dev.js --config webpack/config.server.js",
+    "watch": "webpack --config webpack/config.dev.js --config webpack/config.server.js --watch",
     "bower": "bower"
   },
   "author": "",
@@ -29,7 +29,8 @@
     "react-router-dom": "^4.2.2",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
-    "redux-promise-middleware": "^5.1.1"
+    "redux-promise-middleware": "^5.1.1",
+    "typed-rest-client": "^1.0.7"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.1.0",

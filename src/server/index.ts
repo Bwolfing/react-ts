@@ -2,6 +2,8 @@ import * as express from "express";
 import * as path from "path";
 import * as process from "process";
 
+import { Forums } from "@server/controllers/forums";
+
 const app = express();
 
 const dist = path.join(process.cwd(), "dist");
@@ -46,6 +48,8 @@ app.get("/api/todos", (request, response) => {
         ])
     }, 3000);
 });
+
+app.get("/api/forums", Forums);
 
 app.get("*", (request: express.Request, response: express.Response) => {
     response.sendFile(path.join(dist, "index.html"));
