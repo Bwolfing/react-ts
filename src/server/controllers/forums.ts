@@ -2,7 +2,7 @@ import * as express from "express";
 import { RestClient } from "typed-rest-client/RestClient";
 
 interface ShivtrForums {
-    forums_sections: {
+    forum_sections: {
         id: number,
         name: string,
         forum_ids: number[]
@@ -19,9 +19,17 @@ export async function Forums(request: express.Request, response: express.Respons
 
     try
     {
-        let forumsJson = await client.get<ShivtrForums>("forums.json");
+        let shivtrData = await client.get<ShivtrForums>("forums.json");
+        let responseData: ForumSection[] = [];
+console.log(shivtrData);
+        shivtrData.result.forum_sections.map(s => {
+            responseData.push({
+                name: s.name,
+                forums: s.forum_ids.map(id => shivtrData.result.forums.find(f => f.id === id))
+            })
+        });
 
-        response.json(forumsJson);
+        response.json(responseData);
     }
     catch (error)
     {
