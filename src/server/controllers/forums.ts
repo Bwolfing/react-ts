@@ -1,5 +1,5 @@
 import * as express from "express";
-import { RestClient } from "typed-rest-client/RestClient";
+import { RestClient } from "typed-rest-client";
 
 interface ShivtrForumSections {
     forum_sections: {
@@ -32,11 +32,15 @@ interface ShivtrForum {
     }[];
 }
 
-export async function Forums(request: express.Request, response: express.Response) {
-    let client = new RestClient("shivtr-client", "https://selamaashalanore.shivtr.com");
+export function RegisterForumsRoutes(app: express.Express) {
+    app.get("/api/forums", GetForumSections);
 
+}
+
+async function GetForumSections(request: express.Request, response: express.Response) {
     try
     {
+        const client = buildShivtrClient();
         let shivtrData = await client.get<ShivtrForumSections>("forums.json");
         let responseData: ForumSection[] = [];
 
@@ -59,4 +63,12 @@ export async function Forums(request: express.Request, response: express.Respons
         console.error(error);
         response.sendStatus(500);
     }
+}
+
+async function GetForum(request: express.Request, response: express.Response) {
+    response.send("NOT IMPLEMENTED");
+}
+
+function buildShivtrClient(): RestClient {
+    return new RestClient(process.env.ShivtrUserAgent, process.env.ShivtrBaseAddress);
 }

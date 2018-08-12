@@ -14,3 +14,11 @@ interface Forum {
     name: string;
     description: string;
 }
+
+interface User {
+    id: number;
+    name: string;
+    email: string;
+    timeZone: string;
+    authenticationToken: string;
+}

@@ -2,14 +2,15 @@ import * as express from "express";
 import * as path from "path";
 import * as process from "process";
 
-import { Forums } from "@server/controllers/forums";
+import { RegisterForumsRoutes } from "@server/controllers/forums";
+import { RegisterAuthenticationRoutes } from "@server/controllers/authentication";
 
 const app = express();
-
 const dist = path.join(process.cwd(), "dist");
 
 console.log(`Application path: ${dist}`)
 
+app.use(express.json());
 app.use(express.static(dist));
 app.use(express.static(path.join(dist, "assets")));
 
@@ -49,7 +50,8 @@ app.get("/api/todos", (request, response) => {
     }, 3000);
 });
 
-app.get("/api/forums", Forums);
+RegisterAuthenticationRoutes(app);
+RegisterForumsRoutes(app);
 
 app.get("*", (request: express.Request, response: express.Response) => {
     response.sendFile(path.join(dist, "index.html"));

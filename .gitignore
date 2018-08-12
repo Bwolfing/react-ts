@@ -5,4 +5,6 @@ server/
 !src/server
 dist/
 
+*.log
+
 *.icloud
