@@ -1,7 +1,7 @@
 import * as express from "express";
 import { RestClient } from "typed-rest-client/RestClient";
 
-interface ShivtrForums {
+interface ShivtrForumSections {
     forum_sections: {
         id: number,
         name: string,
@@ -14,14 +14,37 @@ interface ShivtrForums {
     }[];
 }
 
+interface ShivtrForum {
+    forums: {
+        id: number,
+        name: string,
+        description: string
+    }[];
+    forum_threads: {
+        id: number,
+        subject: string,
+        sticky: boolean,
+        lock: boolean,
+        views: number,
+        forum_posts_count: number,
+        created_on: string,
+        forum_id: number
+    }[];
+}
+
 export async function Forums(request: express.Request, response: express.Response) {
     let client = new RestClient("shivtr-client", "https://selamaashalanore.shivtr.com");
 
     try
     {
-        let shivtrData = await client.get<ShivtrForums>("forums.json");
+        let shivtrData = await client.get<ShivtrForumSections>("forums.json");
         let responseData: ForumSection[] = [];
-console.log(shivtrData);
+
+        if (shivtrData.statusCode !== 200) {
+            console.log(`Unsuccessful status: ${shivtrData.statusCode}`);
+            response.sendStatus(shivtrData.statusCode);
+        }
+
         shivtrData.result.forum_sections.map(s => {
             responseData.push({
                 name: s.name,
