@@ -1,6 +1,6 @@
 import * as express from "express";
 
-import { ShivtrClient } from "@server/clients/shivtr-client";
+import { ShivtrClient, RequestFailedError } from "@server/clients/shivtr-client";
 
 export function RegisterAuthenticationRoutes(app: express.Express) {
     app.post("/api/log-in", LogIn);
@@ -25,7 +25,13 @@ async function LogIn(request: express.Request, response: express.Response) {
         response.json(logInResponse);
     } catch (err) {
         console.error(err);
-        response.sendStatus(500);
+
+        if ((<RequestFailedError>err).statusCode) {
+            response.status(err.statusCode).send(err.error);
+        }
+        else {
+            response.sendStatus(500);
+        }
     }
 }
 

@@ -12,6 +12,19 @@ interface ShivtrAuthenticationResponse {
     };
 }
 
+export class RequestFailedError extends Error {
+    constructor(
+        public readonly requestUrl: string,
+        public readonly statusCode: number,
+        public readonly error?: any) {
+        super(`Request to '${requestUrl}' failed (${statusCode} - ${HttpCodes[statusCode]}).`);
+    }
+
+    toString(): string {
+        return JSON.stringify(this);
+    }
+}
+
 export class ShivtrClient {
     private readonly httpClient: HttpClient;
     private readonly jsonHeaders: IHeaders = {
@@ -39,7 +52,12 @@ export class ShivtrClient {
 
         if (response.message.statusCode !== HttpCodes.OK) {
             let errorResponse = await this.readBodyAs<{ error: string }>(response);
-            throw new Error(`Failed request to '${this.baseAddress}/users/sign_in.json' (HTTP ${response.message.statusCode}): ${errorResponse.error}`);
+
+            throw new RequestFailedError(
+                `${this.baseAddress}/users/sign_in.json`,
+                response.message.statusCode,
+                errorResponse
+            );
         }
 
         let shivtrUser = await this.readBodyAs<ShivtrAuthenticationResponse>(response);
