@@ -1,14 +1,9 @@
 import * as express from "express";
 import * as path from "path";
 import * as process from "process";
-import * as dotenv from "dotenv";
 
 import { RegisterForumsRoutes } from "@server/controllers/forums";
 import { RegisterAuthenticationRoutes } from "@server/controllers/authentication";
-
-dotenv.config({
-    path: path.join(process.cwd(), "environment/local.env")
-});
 
 const app = express();
 const dist = path.join(process.cwd(), "dist");

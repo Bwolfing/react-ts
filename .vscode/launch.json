@@ -19,7 +19,11 @@
             "outFiles": [
                 "${workspaceFolder}/server/**/*.js",
                 "${workspaceFolder}/node_modules/**/*.js",
-            ]
+            ],
+            "env": {
+                "ShivtrBaseAddress": "https://selamaashalanore.shivtr.com",
+                "ShivtrUserAgent": "shivtr-api-user"
+            }
         }
     ]
 }
