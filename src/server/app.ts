@@ -43,7 +43,7 @@ export class ServerApp {
     }
 
     private registerRoutes() {
-        new AuthenticationController(getLogger(AuthenticationController.name)).registerRoutes(this.app);
+        AuthenticationController.registerRoutes(this.app);
 
         RegisterForumsRoutes(this.app);
 

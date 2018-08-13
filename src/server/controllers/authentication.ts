@@ -1,7 +1,7 @@
 import * as express from "express";
 
 import { ShivtrClient, RequestFailedError } from "@server/clients/shivtr-client";
-import { Logger } from "log4js";
+import { Logger, getLogger } from "log4js";
 
 
 interface ShivtrLogInResponse {
@@ -15,39 +15,59 @@ interface ShivtrLogInResponse {
 }
 
 export class AuthenticationController {
-    constructor(private readonly logger: Logger) {
+    private constructor(
+        private readonly logger: Logger,
+        private readonly client: ShivtrClient,
+        private readonly request: express.Request,
+        private readonly response: express.Response) {
     }
 
-    registerRoutes(app: express.Express) {
-        app.post("/api/log-in", this.logIn.bind(this));
+    static registerRoutes(app: express.Express) {
+        app.post("/api/log-in", (req, res) => {
+            new AuthenticationController(getLogger(AuthenticationController.name),
+            new ShivtrClient(process.env.ShivtrUserAgent, process.env.ShivtrBaseAddress),
+            req,
+            res).logIn();
+        });
+        app.post("/api/log-out", (req, res) => {
+            new AuthenticationController(getLogger(AuthenticationController.name),
+            new ShivtrClient(process.env.ShivtrUserAgent, process.env.ShivtrBaseAddress),
+            req,
+            res).logOut();
+        });
     }
 
-    private async logIn(request: express.Request, response: express.Response) {
+    private async logIn() {
         try {
-            const client = new ShivtrClient(process.env.ShivtrUserAgent, process.env.ShivtrBaseAddress);
+            let logInResponse = await this.client.logIn(
+                this.request.body["email"],
+                this.request.body["password"]
+            );
 
-            let logInResponse = await client.logIn(request.body["email"], request.body["password"]);
-
-            response.json(logInResponse);
-        } catch (err) {
-            this.logger.error(err);
-
-            if ((<RequestFailedError>err).statusCode) {
-                response.status(err.statusCode).send(err.error);
-            }
-            else {
-                response.sendStatus(500);
-            }
+            this.response.json(logInResponse);
+        } catch (error) {
+            this.handleRequestFailedError(error);
         }
     }
-}
 
-async function LogOut(request: express.Request, response: express.Response) {
-    try {
-        const client = new ShivtrClient(process.env.ShivtrUserAgent, process.env.ShivtrBaseAddress);
+    private async logOut() {
+        try {
+            this.client.logOut(this.request.body["token"]);
 
+            this.response.sendStatus(204);
+        } catch (error) {
+            this.handleRequestFailedError(error);
+        }
+    }
 
-    } catch (error) {
+    private handleRequestFailedError(error: RequestFailedError | any) {
+        this.logger.error(error);
 
+        if ((<RequestFailedError>error).statusCode) {
+            this.response.status(error.statusCode).send(error.error);
+        }
+        else {
+            this.response.sendStatus(500);
+        }
     }
 }

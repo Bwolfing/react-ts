@@ -71,48 +71,18 @@ export class ShivtrClient {
         return user;
     }
 
+    async logOut(token: string): Promise<void> {
+        let response = await this.httpClient.del(`${this.baseAddress}/users/sign_out.json?auth_token=${token}`);
+
+        if (response.message.statusCode !== 204) {
+            throw new RequestFailedError(
+                `${this.baseAddress}/users/sign_out.json`,
+                response.message.statusCode
+            );
+        }
+    }
+
     private async readBodyAs<T>(response: IHttpClientResponse): Promise<T> {
         return <T>JSON.parse(await response.readBody());
     }
 }
-// export class ShivtrClient {
-//     private readonly httpClient: RestClient;
-
-//     constructor(userAgent: string, baseAddress: string) {
-//         this.httpClient = new RestClient(userAgent, baseAddress);
-//     }
-
-//     async logIn(email: string, password: string): Promise<User> {
-//         let response = await this.httpClient.create<ShivtrAuthenticationResponse>(
-//             "/users/sign_in.json",
-//             {
-//                 user: {
-//                     email,
-//                     password
-//                 }
-//             }
-//         );
-
-//         console.log(response.statusCode);
-
-//         let user: User = {
-//             id: response.result.user_session.id,
-//             name: response.result.user_session.name,
-//             authenticationToken: response.result.user_session.authentication_token,
-//             email: response.result.user_session.email,
-//             timeZone: response.result.user_session.time_zone
-//         };
-
-//         return user;
-//     }
-
-//     private async readBodyAs<T>(response: IHttpClientResponse): Promise<T> {
-//         let data = await response.readBody();
-
-//         if (!data) {
-//             return null;
-//         }
-
-//         return <T>JSON.parse(data);
-//     }
-// }
