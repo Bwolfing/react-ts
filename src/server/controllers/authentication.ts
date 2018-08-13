@@ -1,10 +1,8 @@
 import * as express from "express";
 
 import { ShivtrClient, RequestFailedError } from "@server/clients/shivtr-client";
+import { Logger } from "log4js";
 
-export function RegisterAuthenticationRoutes(app: express.Express) {
-    app.post("/api/log-in", LogIn);
-}
 
 interface ShivtrLogInResponse {
     user: {
@@ -16,21 +14,30 @@ interface ShivtrLogInResponse {
     };
 }
 
-async function LogIn(request: express.Request, response: express.Response) {
-    try {
-        const client = new ShivtrClient(process.env.ShivtrUserAgent, process.env.ShivtrBaseAddress);
+export class AuthenticationController {
+    constructor(private readonly logger: Logger) {
+    }
 
-        let logInResponse = await client.logIn(request.body["email"], request.body["password"]);
+    registerRoutes(app: express.Express) {
+        app.post("/api/log-in", this.logIn.bind(this));
+    }
 
-        response.json(logInResponse);
-    } catch (err) {
-        console.error(err);
+    private async logIn(request: express.Request, response: express.Response) {
+        try {
+            const client = new ShivtrClient(process.env.ShivtrUserAgent, process.env.ShivtrBaseAddress);
 
-        if ((<RequestFailedError>err).statusCode) {
-            response.status(err.statusCode).send(err.error);
-        }
-        else {
-            response.sendStatus(500);
+            let logInResponse = await client.logIn(request.body["email"], request.body["password"]);
+
+            response.json(logInResponse);
+        } catch (err) {
+            this.logger.error(err);
+
+            if ((<RequestFailedError>err).statusCode) {
+                response.status(err.statusCode).send(err.error);
+            }
+            else {
+                response.sendStatus(500);
+            }
         }
     }
 }

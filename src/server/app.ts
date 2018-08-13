@@ -4,7 +4,7 @@ import * as fs from "fs";
 import { configure, connectLogger, getLogger, Logger } from "log4js";
 
 import { RegisterForumsRoutes } from "@server/controllers/forums";
-import { RegisterAuthenticationRoutes } from "@server/controllers/authentication";
+import { AuthenticationController } from "@server/controllers/authentication";
 
 
 export class ServerApp {
@@ -43,7 +43,8 @@ export class ServerApp {
     }
 
     private registerRoutes() {
-        RegisterAuthenticationRoutes(this.app);
+        new AuthenticationController(getLogger(AuthenticationController.name)).registerRoutes(this.app);
+
         RegisterForumsRoutes(this.app);
 
         this.app.get("*", (request, response) => {
