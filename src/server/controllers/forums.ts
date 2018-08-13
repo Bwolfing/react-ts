@@ -1,5 +1,4 @@
 import * as express from "express";
-import { RestClient } from "typed-rest-client";
 
 interface ShivtrForumSections {
     forum_sections: {
@@ -38,37 +37,37 @@ export function RegisterForumsRoutes(app: express.Express) {
 }
 
 async function GetForumSections(request: express.Request, response: express.Response) {
-    try
-    {
-        const client = buildShivtrClient();
-        let shivtrData = await client.get<ShivtrForumSections>("forums.json");
-        let responseData: ForumSection[] = [];
+    // try
+    // {
+    //     const client = buildShivtrClient();
+    //     let shivtrData = await client.get<ShivtrForumSections>("forums.json");
+    //     let responseData: ForumSection[] = [];
 
-        if (shivtrData.statusCode !== 200) {
-            console.log(`Unsuccessful status: ${shivtrData.statusCode}`);
-            response.sendStatus(shivtrData.statusCode);
-        }
+    //     if (shivtrData.statusCode !== 200) {
+    //         console.log(`Unsuccessful status: ${shivtrData.statusCode}`);
+    //         response.sendStatus(shivtrData.statusCode);
+    //     }
 
-        shivtrData.result.forum_sections.map(s => {
-            responseData.push({
-                name: s.name,
-                forums: s.forum_ids.map(id => shivtrData.result.forums.find(f => f.id === id))
-            })
-        });
+    //     shivtrData.result.forum_sections.map(s => {
+    //         responseData.push({
+    //             name: s.name,
+    //             forums: s.forum_ids.map(id => shivtrData.result.forums.find(f => f.id === id))
+    //         })
+    //     });
 
-        response.json(responseData);
-    }
-    catch (error)
-    {
-        console.error(error);
-        response.sendStatus(500);
-    }
+    //     response.json(responseData);
+    // }
+    // catch (error)
+    // {
+    //     console.error(error);
+    //     response.sendStatus(500);
+    // }
 }
 
-async function GetForum(request: express.Request, response: express.Response) {
-    response.send("NOT IMPLEMENTED");
-}
+// async function GetForum(request: express.Request, response: express.Response) {
+//     response.send("NOT IMPLEMENTED");
+// }
 
-function buildShivtrClient(): RestClient {
-    return new RestClient(process.env.ShivtrUserAgent, process.env.ShivtrBaseAddress);
-}
+// function buildShivtrClient(): RestClient {
+//     return new RestClient(process.env.ShivtrUserAgent, process.env.ShivtrBaseAddress);
+// }

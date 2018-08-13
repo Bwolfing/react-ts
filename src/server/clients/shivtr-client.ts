@@ -1,4 +1,3 @@
-import { RestClient } from "typed-rest-client";
 import { HttpClient, HttpCodes } from "typed-rest-client/HttpClient";
 import { IHttpClientResponse, IHeaders } from "typed-rest-client/Interfaces";
 
