@@ -104,21 +104,21 @@ module.exports = {
     module: {
         rules: [
             {
-                "test": /\.html$/,
-                "loader": "raw-loader"
+                test: /\.html$/,
+                loader: "raw-loader"
             },
             {
-                "test": /\.(eot|svg|cur)$/,
-                "loader": "file-loader",
-                "options": {
+                test: /\.(eot|svg|cur)$/,
+                loader: "file-loader",
+                options: {
                     "name": "assets/[name].[ext]",
                     "limit": 10000
                 }
             },
             {
-                "test": /\.(jpg|png|webp|gif|otf|ttf|woff|woff2|ani)$/,
-                "loader": "url-loader",
-                "options": {
+                test: /\.(jpg|png|webp|gif|otf|ttf|woff|woff2|ani)$/,
+                loader: "url-loader",
+                options: {
                     "name": "assets/[name].[ext]",
                     "limit": 10000
                 }
@@ -141,7 +141,7 @@ module.exports = {
             },
             {
                 test: /\.tsx?$/,
-                loader: "awesome-typescript-loader"
+                loader: "awesome-typescript-loader",
             },
             {
                 enforce: "pre",

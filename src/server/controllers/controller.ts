@@ -2,9 +2,10 @@ import * as express from "express";
 import { Logger } from "log4js";
 
 import { RequestFailedError } from "@server/clients/shivtr-client";
+import { IWriteLog } from "@server/clients/logging";
 
 export class Controller {
-    constructor(protected readonly logger: Logger,
+    constructor(protected readonly logger: IWriteLog,
         protected readonly request: express.Request,
         protected readonly response: express.Response) {
     }

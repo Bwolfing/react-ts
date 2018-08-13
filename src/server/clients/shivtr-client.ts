@@ -24,7 +24,12 @@ export class RequestFailedError extends Error {
     }
 }
 
-export class ShivtrClient {
+export abstract class IShivtrClient {
+    abstract logIn(email: string, password: string): Promise<User>;
+    abstract logOut(token: string): Promise<void>;
+}
+
+export class ShivtrClient implements IShivtrClient {
     private readonly httpClient: HttpClient;
     private readonly jsonHeaders: IHeaders = {
         "Accept": "application/json",

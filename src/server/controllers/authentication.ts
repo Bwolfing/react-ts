@@ -1,15 +1,16 @@
 import * as express from "express";
 
-import { ShivtrClient } from "@server/clients/shivtr-client";
-import { Logger, getLogger } from "log4js";
+import { ShivtrClient, IShivtrClient } from "@server/clients/shivtr-client";
+import { getLogger } from "log4js";
 import { Controller } from "@server/controllers/controller";
+import { IWriteLog } from "@server/clients/logging";
 
 
 export class AuthenticationController extends Controller {
-    private constructor(logger: Logger,
+    constructor(logger: IWriteLog,
         request: express.Request,
         response: express.Response,
-        private readonly client: ShivtrClient) {
+        private readonly client: IShivtrClient) {
             super(logger, request, response);
     }
 
@@ -32,7 +33,7 @@ export class AuthenticationController extends Controller {
         });
     }
 
-    private async logIn(email: string, password: string) {
+    async logIn(email: string, password: string) {
         try {
             let logInResponse = await this.client.logIn(
                 email,
@@ -45,7 +46,7 @@ export class AuthenticationController extends Controller {
         }
     }
 
-    private async logOut(token: string) {
+    async logOut(token: string) {
         try {
             this.client.logOut(token);
 
