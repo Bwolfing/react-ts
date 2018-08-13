@@ -1,73 +1,59 @@
 import * as express from "express";
 import * as path from "path";
-import { configure, connectLogger, Configuration, getLogger } from "log4js";
+import * as fs from "fs";
+import { configure, connectLogger, getLogger, Logger } from "log4js";
 
 import { RegisterForumsRoutes } from "@server/controllers/forums";
 import { RegisterAuthenticationRoutes } from "@server/controllers/authentication";
 
-export const ServerApp = express();
-const dist = path.join(process.cwd(), "dist");
 
-let config: Configuration = {
-    appenders: {
-        console: {
-            type: "console"
-        }
-    },
-    categories: {
-        default: {
-            appenders: ["console"],
-            level: "all"
-        }
+export class ServerApp {
+    private readonly app: express.Express;
+    private readonly log: Logger;
+    private readonly distPath: string;
+
+    constructor() {
+        this.distPath = path.join(process.cwd(), "dist");
+        this.app = express();
+
+        this.configureLogging();
+
+        this.log = getLogger();
+
+        this.configureMiddleware();
+        this.registerRoutes();
+
+        this.log.info("Application configured.");
     }
-};
 
-configure(config);
+    private configureLogging() {
+        const log4jsConfig = fs.readFileSync(
+            path.join(process.cwd(), "config/log4js.json"),
+            "utf8"
+        );
 
-ServerApp.use(connectLogger(getLogger(), {}));
-ServerApp.use(express.json());
-ServerApp.use(express.static(dist));
-ServerApp.use(express.static(path.join(dist, "assets")));
+        configure(JSON.parse(log4jsConfig));
+    }
 
-ServerApp.get("/api/todos", (request, response) => {
-    setTimeout(() => {
-        if (new Date(Date.now()).getSeconds() % 2) {
-            response.statusMessage = "Intentional failure";
-            response.status(400).send({
-                error: "Bad Request",
-                errorDetail: "Wanted an intentional error"
-            });
-            return;
-        }
+    private configureMiddleware() {
+        this.app.use(express.json());
+        this.app.use(connectLogger(getLogger(), {}));
+        this.app.use(express.static(this.distPath));
+        this.app.use(express.static(path.join(this.distPath, "assets")));
+    }
 
-        response.send([
-            {
-                id: 1,
-                completed: true,
-                text: "Read about React"
-            },
-            {
-                id: 2,
-                completed: true,
-                text: "Build with React"
-            },
-            {
-                id: 3,
-                completed: false,
-                text: "Read about Redux"
-            },
-            {
-                id: 4,
-                completed: false,
-                text: "Build with Redux"
-            },
-        ])
-    }, 3000);
-});
+    private registerRoutes() {
+        RegisterAuthenticationRoutes(this.app);
+        RegisterForumsRoutes(this.app);
 
-RegisterAuthenticationRoutes(ServerApp);
-RegisterForumsRoutes(ServerApp);
+        this.app.get("*", (request, response) => {
+            response.sendfile(path.join(this.distPath, "index.html"));
+        });
+    }
 
-ServerApp.get("*", (request: express.Request, response: express.Response) => {
-    response.sendFile(path.join(dist, "index.html"));
-});
+    start(port: string | number) {
+        this.app.listen(port, () => {
+            this.log.info(`Listening on port ${port}. Press Ctrl + C to exit.`);
+        });
+    }
+}
