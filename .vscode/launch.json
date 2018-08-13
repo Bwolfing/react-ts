@@ -8,6 +8,7 @@
             "name": "Launch",
             "type": "node",
             "request": "launch",
+            "preLaunchTask": "build",
             "program": "${workspaceFolder}/src/server/index.ts",
             "stopOnEntry": false,
             "args": [],
