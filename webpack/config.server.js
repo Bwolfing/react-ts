@@ -22,7 +22,12 @@ module.exports = {
         path: path.join(projectRoot, "server"),
         filename: "index.js",
         chunkFilename: "index.js",
+        // Bundle absolute resource paths in the source-map,
+        // so VSCode can match the source file.
+        devtoolModuleFilenameTemplate: '[absolute-resource-path]'
     },
+    mode: environmentName,
+    devtool: "source-map",
     resolve: {
         extensions: [
             ".ts",
@@ -38,7 +43,6 @@ module.exports = {
             new TsconfigPaths()
         ],
     },
-    mode: environmentName,
     plugins: [
         new CleanWebpackPlugin(path.join(projectRoot, "server"), {
             root: projectRoot

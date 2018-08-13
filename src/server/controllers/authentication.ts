@@ -19,14 +19,12 @@ interface ShivtrLogInResponse {
 async function LogIn(request: express.Request, response: express.Response) {
     try {
         const client = new ShivtrClient(process.env.ShivtrUserAgent, process.env.ShivtrBaseAddress);
-        console.log(request);
-        console.log(request.body);
 
         let logInResponse = await client.logIn(request.body["email"], request.body["password"]);
 
         response.json(logInResponse);
-    } catch (error) {
-        console.error(error);
+    } catch (err) {
+        console.error(err);
         response.sendStatus(500);
     }
 }

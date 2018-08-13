@@ -1,5 +1,6 @@
+import { RestClient } from "typed-rest-client";
 import { HttpClient, HttpCodes } from "typed-rest-client/HttpClient";
-import { IHttpClientResponse } from "typed-rest-client/Interfaces";
+import { IHttpClientResponse, IHeaders } from "typed-rest-client/Interfaces";
 
 interface ShivtrAuthenticationResponse {
     user_session: {
@@ -13,25 +14,27 @@ interface ShivtrAuthenticationResponse {
 
 export class ShivtrClient {
     private readonly httpClient: HttpClient;
+    private readonly jsonHeaders: IHeaders = {
+        "Accept": "application/json",
+        "Content-Type": "application/json; charset=utf-8"
+    };
 
     constructor(userAgent: string, private readonly baseAddress: string) {
-        this.httpClient = new HttpClient(userAgent, undefined, {
-            headers: {
-                "User-Agent": userAgent,
-                "Content-Type": "application/json"
-            }
-        });
+        this.httpClient = new HttpClient(userAgent);
     }
 
     async logIn(email: string, password: string): Promise<User> {
+        const data = JSON.stringify({
+            user: {
+                email,
+                password
+            }
+        }, null, 2);
+
         let response = await this.httpClient.post(
             `${this.baseAddress}/users/sign_in.json`,
-            JSON.stringify({
-                user: {
-                    email,
-                    password
-                }
-            })
+            data,
+            this.jsonHeaders
         );
 
         if (response.message.statusCode !== HttpCodes.OK) {
@@ -55,3 +58,44 @@ export class ShivtrClient {
         return <T>JSON.parse(await response.readBody());
     }
 }
+// export class ShivtrClient {
+//     private readonly httpClient: RestClient;
+
+//     constructor(userAgent: string, baseAddress: string) {
+//         this.httpClient = new RestClient(userAgent, baseAddress);
+//     }
+
+//     async logIn(email: string, password: string): Promise<User> {
+//         let response = await this.httpClient.create<ShivtrAuthenticationResponse>(
+//             "/users/sign_in.json",
+//             {
+//                 user: {
+//                     email,
+//                     password
+//                 }
+//             }
+//         );
+
+//         console.log(response.statusCode);
+
+//         let user: User = {
+//             id: response.result.user_session.id,
+//             name: response.result.user_session.name,
+//             authenticationToken: response.result.user_session.authentication_token,
+//             email: response.result.user_session.email,
+//             timeZone: response.result.user_session.time_zone
+//         };
+
+//         return user;
+//     }
+
+//     private async readBodyAs<T>(response: IHttpClientResponse): Promise<T> {
+//         let data = await response.readBody();
+
+//         if (!data) {
+//             return null;
+//         }
+
+//         return <T>JSON.parse(data);
+//     }
+// }
