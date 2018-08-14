@@ -11,6 +11,19 @@ interface ShivtrAuthenticationResponse {
     };
 }
 
+interface ShivtrForumSections {
+    forum_sections: {
+        id: number,
+        name: string,
+        forum_ids: number[]
+    }[];
+    forums: {
+        id: number,
+        name: string,
+        description: string
+    }[];
+}
+
 export class RequestFailedError extends Error {
     constructor(
         public readonly requestUrl: string,
@@ -24,12 +37,12 @@ export class RequestFailedError extends Error {
     }
 }
 
-export abstract class IShivtrClient {
+export abstract class IAuthenticateWithShivtr {
     abstract logIn(email: string, password: string): Promise<User>;
     abstract logOut(token: string): Promise<void>;
 }
 
-export class ShivtrClient implements IShivtrClient {
+export class ShivtrAuthClient implements IAuthenticateWithShivtr {
     private readonly httpClient: HttpClient;
     private readonly jsonHeaders: IHeaders = {
         "Accept": "application/json",
@@ -85,6 +98,12 @@ export class ShivtrClient implements IShivtrClient {
                 response.message.statusCode
             );
         }
+    }
+
+    async forumSections(): Promise<ForumSection[]> {
+        const requestUrl = `${this.baseAddress}/forums.json`;
+
+        this.httpClient.get(requestUrl)
     }
 
     private async readBodyAs<T>(response: IHttpClientResponse): Promise<T> {

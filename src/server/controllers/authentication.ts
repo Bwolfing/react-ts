@@ -1,34 +1,34 @@
 import * as express from "express";
 
-import { ShivtrClient, IShivtrClient } from "@server/clients/shivtr-client";
+import { ShivtrAuthClient, IAuthenticateWithShivtr } from "@server/clients/shivtr-auth-client";
 import { getLogger } from "log4js";
 import { Controller } from "@server/controllers/controller";
 import { IWriteLog } from "@server/clients/logging";
 
 
 export class AuthenticationController extends Controller {
-    constructor(logger: IWriteLog,
+    constructor(log: IWriteLog,
         request: express.Request,
         response: express.Response,
-        private readonly client: IShivtrClient) {
-            super(logger, request, response);
+        private readonly client: IAuthenticateWithShivtr) {
+            super(log, request, response);
     }
 
     static registerRoutes(app: express.Express) {
-        app.post("/api/log-in", (req, res) => {
-            new AuthenticationController(
+        app.post("/api/log-in", async (req, res) => {
+            await new AuthenticationController(
                 getLogger(AuthenticationController.name),
                 req,
                 res,
-                new ShivtrClient(process.env.ShivtrUserAgent, process.env.ShivtrBaseAddress)
+                new ShivtrAuthClient(process.env.ShivtrUserAgent, process.env.ShivtrBaseAddress)
             ).logIn(req.body["email"], req.body["email"]);
         });
-        app.post("/api/log-out", (req, res) => {
-            new AuthenticationController(
+        app.post("/api/log-out", async (req, res) => {
+            await new AuthenticationController(
                 getLogger(AuthenticationController.name),
                 req,
                 res,
-                new ShivtrClient(process.env.ShivtrUserAgent, process.env.ShivtrBaseAddress)
+                new ShivtrAuthClient(process.env.ShivtrUserAgent, process.env.ShivtrBaseAddress)
             ).logOut(req.body["token"]);
         });
     }

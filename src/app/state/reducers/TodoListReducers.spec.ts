@@ -1,5 +1,5 @@
-import { fetchingTodos } from "./TodoListReducers";
-import { PendingTodoFetchAction, TodoListAction, FulfilledTodoFetchAction, RejectedTodoFetchAction } from "../actions/TodoListActions";
+import { fetchingTodos } from "@app/state/reducers/TodoListReducers";
+import { PendingTodoFetchAction, TodoListAction, FulfilledTodoFetchAction, RejectedTodoFetchAction } from "@app/state/actions/TodoListActions";
 
 describe("fetchingTodos", () => {
     it("when action type is 'Fetch Todos_PENDING' then result is truthy.", () => {

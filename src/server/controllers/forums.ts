@@ -1,17 +1,11 @@
 import * as express from "express";
 
-interface ShivtrForumSections {
-    forum_sections: {
-        id: number,
-        name: string,
-        forum_ids: number[]
-    }[];
-    forums: {
-        id: number,
-        name: string,
-        description: string
-    }[];
-}
+import { Controller } from "@server/controllers/controller";
+import { IWriteLog } from "@server/clients/logging";
+import { request } from "https";
+import { getLogger } from "log4js";
+
+
 
 interface ShivtrForum {
     forums: {
@@ -31,12 +25,37 @@ interface ShivtrForum {
     }[];
 }
 
+export class ForumsController extends Controller {
+    constructor(log: IWriteLog,
+        request: express.Request,
+        response: express.Response) {
+
+        super(log, request, response);
+    }
+
+    static registerRoutes(app: express.Express) {
+        app.get("/api/forums", async (request, response) => {
+            await new ForumsController(
+                getLogger(ForumsController.name),
+                request,
+                response,
+            ).getForumSections()
+        });
+    }
+
+    async getForumSections() {
+        try {
+
+        }
+    }
+}
+
 export function RegisterForumsRoutes(app: express.Express) {
-    app.get("/api/forums", GetForumSections);
+    app.get("/api/forums", getForumSections);
 
 }
 
-async function GetForumSections(request: express.Request, response: express.Response) {
+async function getForumSections(request: express.Request, response: express.Response) {
     // try
     // {
     //     const client = buildShivtrClient();

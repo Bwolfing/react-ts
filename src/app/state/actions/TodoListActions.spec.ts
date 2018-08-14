@@ -1,4 +1,4 @@
-import { addTodo, toggleTodo } from "./TodoListActions";
+import { addTodo, toggleTodo } from "@app/state/actions/TodoListActions";
 
 describe("addTodo", () => {
     it("should use the provided text.", () => {
