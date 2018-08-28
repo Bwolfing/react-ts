@@ -3,11 +3,11 @@ export abstract class IShivtrForumsClient {
 }
 
 export class ShivtrForumsClient implements IShivtrForumsClient {
+    
     constructor(userAgent: string, private readonly baseAddress: string) {
-
     }
 
     async forumSections(): Promise<ForumSection[]> {
-        throw new Error("Not implemented");
+        this.
     }
 }
