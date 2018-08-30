@@ -3,7 +3,7 @@ import * as path from "path";
 import * as fs from "fs";
 import { configure, connectLogger, getLogger, Logger } from "log4js";
 
-import { RegisterForumsRoutes } from "@server/controllers/forums";
+import { ForumsController } from "@server/controllers/forums";
 import { AuthenticationController } from "@server/controllers/authentication";
 
 
@@ -44,8 +44,7 @@ export class ServerApp {
 
     private registerRoutes() {
         AuthenticationController.registerRoutes(this.app);
-
-        RegisterForumsRoutes(this.app);
+        ForumsController.registerRoutes(this.app);
 
         this.app.get("*", (request, response) => {
             response.sendfile(path.join(this.distPath, "index.html"));

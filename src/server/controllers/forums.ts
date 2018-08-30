@@ -2,35 +2,22 @@ import * as express from "express";
 
 import { Controller } from "@server/controllers/controller";
 import { IWriteLog } from "@server/clients/logging";
-import { request } from "https";
 import { getLogger } from "log4js";
 
-
-
-interface ShivtrForum {
-    forums: {
-        id: number,
-        name: string,
-        description: string
-    }[];
-    forum_threads: {
-        id: number,
-        subject: string,
-        sticky: boolean,
-        lock: boolean,
-        views: number,
-        forum_posts_count: number,
-        created_on: string,
-        forum_id: number
-    }[];
-}
+import { IShivtrForumsClient, ShivtrForumsClient } from "@server/clients/shivtr-forums-client";
 
 export class ForumsController extends Controller {
+    private readonly shivtrClient: IShivtrForumsClient;
+
     constructor(log: IWriteLog,
         request: express.Request,
         response: express.Response) {
-
         super(log, request, response);
+
+        this.shivtrClient = new ShivtrForumsClient(
+            process.env.ShivtrUserAgent,
+            process.env.ShivtrBaseAddress
+        );
     }
 
     static registerRoutes(app: express.Express) {
@@ -45,14 +32,14 @@ export class ForumsController extends Controller {
 
     async getForumSections() {
         try {
+            let forums = await this.shivtrClient.forumSections();
 
+            this.response.json(forums);
+        }
+        catch (e) {
+            this.handleRequestFailedError(e);
         }
     }
-}
-
-export function RegisterForumsRoutes(app: express.Express) {
-    app.get("/api/forums", getForumSections);
-
 }
 
 async function getForumSections(request: express.Request, response: express.Response) {

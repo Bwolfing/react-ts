@@ -1,6 +1,6 @@
 import * as express from "express";
 
-import { RequestFailedError } from "@server/clients/shivtr-auth-client";
+import { RequestFailedError } from "@server/clients/json-http-client";
 import { IWriteLog } from "@server/clients/logging";
 
 export class Controller {
