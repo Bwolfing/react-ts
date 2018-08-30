@@ -65,6 +65,16 @@ export class JsonHttpClient {
         await this.ensureSuccessStatus(requestUri, response);
     }
 
+    async getAsJson<TResponse>(uri: string): Promise<TResponse> {
+        const requestUri = `${this.baseAddress}${uri}`;
+
+        const response = await this.client.get(requestUri);
+
+        await this.ensureSuccessStatus(requestUri, response);
+
+        return await this.readBodyAs<TResponse>(response);
+    }
+
     private async ensureSuccessStatus(uri: string, response: IHttpClientResponse): Promise<void> {
         if (response.message.statusCode !== HttpCodes.OK && response.message.statusCode !== 204) {
             let errorResponse = await this.readBodyAs<{ error: string }>(response);
